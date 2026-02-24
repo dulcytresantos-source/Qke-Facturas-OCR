@@ -1,0 +1,7 @@
+{
+  "name": "InvoiceControl Pro",
+  "description": "An intelligent invoice management tool that processes documents via AI, extracts key data points, and exports them to CSV with built-in rate limiting.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
