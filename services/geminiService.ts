@@ -1,24 +1,24 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { ExtractionResult } from "../types";
-
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const extractInvoiceData = async (
   base64Data: string,
   mimeType: string
 ): Promise<ExtractionResult> => {
+  const apiKey = (import.meta as any).env?.VITE_API_KEY as string | undefined;
+
+  if (!apiKey) {
+    throw new Error("Falta VITE_API_KEY en Vercel (Settings → Environment Variables).");
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+
   const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
+    model: "gemini-3-flash-preview",
     contents: [
       {
         parts: [
-          {
-            inlineData: {
-              data: base64Data,
-              mimeType: mimeType,
-            },
-          },
+          { inlineData: { data: base64Data, mimeType } },
           {
             text: "Extrae de la factura: Proveedor, Fecha (YYYY-MM-DD), Número de factura e Importe total. También genera un 'nombre corto' para el proveedor (una sola palabra distintiva, ej: 'Boston Scientifics' -> 'Boston', 'War Medical' -> 'W. Medical'). Responde en JSON.",
           },
@@ -42,9 +42,5 @@ export const extractInvoiceData = async (
   });
 
   const jsonStr = response.text?.trim() || "{}";
-  try {
-    return JSON.parse(jsonStr) as ExtractionResult;
-  } catch (e) {
-    throw new Error("Error parseando respuesta JSON.");
-  }
+  return JSON.parse(jsonStr) as ExtractionResult;
 };
