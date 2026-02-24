@@ -1,26 +1,31 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 import { ExtractionResult } from "../types";
-
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 export const extractInvoiceData = async (
   base64Data: string,
   mimeType: string
 ): Promise<ExtractionResult> => {
+
+  // En Vite, las variables públicas van en import.meta.env y deben empezar por VITE_
+  const apiKey = (import.meta as any).env?.VITE_API_KEY as string | undefined;
+
+  if (!apiKey) {
+    throw new Error("Falta VITE_API_KEY (no hay clave configurada).");
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
+
   const response = await ai.models.generateContent({
-    model: 'gemini-3-flash-preview',
+    model: "gemini-3-flash-preview",
     contents: [
       {
         parts: [
+          { inlineData: { data: base64Data, mimeType } },
           {
-            inlineData: {
-              data: base64Data,
-              mimeType: mimeType,
-            },
-          },
-          {
-            text: "Extrae de la factura: Proveedor, Fecha (YYYY-MM-DD), Número de factura e Importe total. También genera un 'nombre corto' para el proveedor (una sola palabra distintiva, ej: 'Boston Scientifics' -> 'Boston', 'War Medical' -> 'W. Medical'). Responde en JSON.",
+            text:
+              "Extrae de la factura: Proveedor, Fecha (YYYY-MM-DD), Número de factura e Importe total. " +
+              "También genera un 'nombre corto' para el proveedor (una sola palabra distintiva, ej: " +
+              "'Boston Scientifics' -> 'Boston', 'War Medical' -> 'W. Medical'). Responde en JSON.",
           },
         ],
       },
@@ -31,7 +36,7 @@ export const extractInvoiceData = async (
         type: Type.OBJECT,
         properties: {
           proveedor: { type: Type.STRING },
-          shortenedProveedor: { type: Type.STRING, description: "Nombre distintivo corto de una sola palabra" },
+          shortenedProveedor: { type: Type.STRING },
           fechaFactura: { type: Type.STRING },
           numeroFactura: { type: Type.STRING },
           importe: { type: Type.NUMBER },
@@ -42,9 +47,5 @@ export const extractInvoiceData = async (
   });
 
   const jsonStr = response.text?.trim() || "{}";
-  try {
-    return JSON.parse(jsonStr) as ExtractionResult;
-  } catch (e) {
-    throw new Error("Error parseando respuesta JSON.");
-  }
+  return JSON.parse(jsonStr) as ExtractionResult;
 };
