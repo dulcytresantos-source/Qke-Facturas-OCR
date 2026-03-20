@@ -2,7 +2,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { InvoiceData, ProcessingStatus } from './types';
 import { extractInvoiceData } from './services/geminiService';
-import { fileToBase64, generateTSV, downloadFile, generateRenamedFileName, formatSpanishAmount } from './utils/helpers';
+import { fileToBase64, generateTSV, downloadFile, generateRenamedFileName, formatSpanishAmount, formatSpanishDate } from './utils/helpers';
 import { StatsCards } from './components/StatsCards';
 
 type SortKey = keyof InvoiceData;
@@ -488,7 +488,7 @@ const App: React.FC = () => {
                              {inv.fileName}
                            </span>
                            {inv.status === ProcessingStatus.COMPLETED && !inv.isDuplicate && (
-                             <span className="text-[10px] text-indigo-600 font-black mt-2 bg-indigo-50 px-2 py-1 rounded-lg inline-block w-fit border border-indigo-100/50 uppercase tracking-tighter">
+                             <span className="text-xs text-indigo-600 font-black mt-2 bg-indigo-50 px-3 py-1.5 rounded-xl inline-block w-fit border border-indigo-100/50 uppercase tracking-tight shadow-sm">
                                → {inv.renamedFileName}
                              </span>
                            )}
@@ -499,7 +499,7 @@ const App: React.FC = () => {
                         <div className="text-sm font-black text-slate-900">{inv.proveedor}</div>
                         {inv.shortenedProveedor !== '-' && <div className="text-[10px] text-indigo-500 font-black uppercase tracking-widest mt-1">{inv.shortenedProveedor}</div>}
                       </td>
-                      <td className="px-8 py-6 text-sm text-slate-500 font-bold">{inv.fechaFactura}</td>
+                      <td className="px-8 py-6 text-sm text-slate-500 font-bold">{formatSpanishDate(inv.fechaFactura)}</td>
                       <td className="px-8 py-6 text-sm text-slate-500 font-bold">{inv.numeroFactura}</td>
                       <td className="px-8 py-6 text-sm font-black text-slate-900">
                         {inv.status === ProcessingStatus.COMPLETED ? (

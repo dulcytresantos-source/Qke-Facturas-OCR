@@ -8,6 +8,15 @@ export const formatSpanishAmount = (amount: number): string => {
   }).format(amount);
 };
 
+export const formatSpanishDate = (dateStr: string): string => {
+  if (!dateStr || dateStr === '-') return '-';
+  // Gemini returns YYYY-MM-DD
+  const parts = dateStr.split('-');
+  if (parts.length !== 3) return dateStr;
+  const [year, month, day] = parts;
+  return `${day}/${month}/${year}`;
+};
+
 /**
  * Genera el código NDoc (ej: 09-FC01)
  * @param invoice Datos de la factura
@@ -92,7 +101,7 @@ export const generateTSV = (
         identifier,
         inv.proveedor,
         inv.numeroFactura,
-        inv.fechaFactura,
+        formatSpanishDate(inv.fechaFactura),
         formattedAmount,
         inv.isDuplicate ? `DUPLICADO DE: ${inv.duplicateOfName}` : "OK"
       ];
