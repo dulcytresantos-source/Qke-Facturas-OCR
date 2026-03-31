@@ -6,6 +6,23 @@
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900;
+    @apply bg-slate-950 text-emerald-500;
+  }
+}
+
+@layer utilities {
+  @keyframes matrix-rain {
+    0% { transform: translateY(-100%); }
+    100% { transform: translateY(100%); }
+  }
+  .animate-matrix-rain {
+    animation: matrix-rain 10s linear infinite;
+  }
+  @keyframes scan-line {
+    0% { top: 0; }
+    100% { top: 100%; }
+  }
+  .animate-scan-line {
+    animation: scan-line 4s linear infinite;
   }
 }

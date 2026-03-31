@@ -271,410 +271,400 @@ const App: React.FC = () => {
 
   const SortIcon = ({ column }: { column: SortKey }) => {
     if (sortConfig.key !== column) return (
-      <svg className="w-3 h-3 text-slate-300 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-3 h-3 text-emerald-900 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"/>
       </svg>
     );
     return sortConfig.direction === 'asc' ? (
-      <svg className="w-3 h-3 text-indigo-600 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-3 h-3 text-emerald-400 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7"/>
       </svg>
     ) : (
-      <svg className="w-3 h-3 text-indigo-600 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <svg className="w-3 h-3 text-emerald-400 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/>
       </svg>
     );
   };
 
   return (
-    <div className="min-h-screen p-4 md:p-8 bg-slate-50">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen p-2 md:p-4 bg-slate-950 text-emerald-500 font-mono">
+      <div className="max-w-[1600px] mx-auto">
         {/* Header */}
-        <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <header className="mb-4 flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-emerald-900/30 pb-4">
           <div>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-12 h-12 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-200">
-                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            <div className="flex items-center gap-2 mb-0.5">
+              <div className="w-8 h-8 bg-emerald-600 rounded flex items-center justify-center shadow-lg shadow-emerald-900/20">
+                <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
               </div>
-              <h1 className="text-4xl font-black text-slate-900 tracking-tight">
-                InvoiceControl<span className="text-indigo-600">Pro</span>
+              <h1 className="text-xl font-black tracking-tighter uppercase">
+                Invoice<span className="text-white">Matrix</span>_v2.4
               </h1>
             </div>
-            <p className="text-slate-500 font-medium text-lg ml-1">
-              Gestión inteligente de facturas con <span className="text-indigo-500 font-bold">IA</span>
+            <p className="text-emerald-700 font-bold text-[10px] ml-1 uppercase tracking-[0.2em]">
+              System.Status: <span className="text-emerald-400 animate-pulse">Online</span> // Neural_OCR_Active
             </p>
           </div>
 
-          {!hasApiKey && (
-            <div className="bg-rose-50 border border-rose-100 px-4 py-2 rounded-2xl flex items-center gap-3 animate-pulse">
-              <div className="w-2 h-2 bg-rose-500 rounded-full"></div>
-              <p className="text-[10px] font-black text-rose-700 uppercase tracking-widest">
-                Falta API KEY - Revisa los Secretos
-              </p>
+          <div className="flex items-center gap-2">
+            {!hasApiKey && (
+              <div className="bg-rose-950/50 border border-rose-500/50 px-3 py-1 rounded flex items-center gap-2">
+                <div className="w-1.5 h-1.5 bg-rose-500 rounded-full animate-ping"></div>
+                <p className="text-[9px] font-black text-rose-500 uppercase tracking-widest">
+                  CRITICAL: Missing_API_Key
+                </p>
+              </div>
+            )}
+            <div className="flex flex-col items-end">
+              <span className="text-[9px] text-emerald-800 uppercase tracking-widest font-black">
+                Terminal_ID: {Math.random().toString(36).substring(7).toUpperCase()}
+              </span>
+              <span className="text-[9px] text-emerald-600 uppercase tracking-widest font-black">
+                Kernel_Ready
+              </span>
             </div>
-          )}
-
-          <div className="flex items-center gap-3">
-            <span className="text-[10px] bg-slate-200 text-slate-600 px-3 py-1.5 rounded-full uppercase tracking-widest font-black border border-slate-300/50">
-              v2.4 Stable
-            </span>
-            <span className="text-[10px] bg-indigo-600 text-white px-3 py-1.5 rounded-full uppercase tracking-widest font-black shadow-lg shadow-indigo-100">
-              Manual OCR
-            </span>
           </div>
         </header>
 
-        {/* Control Center */}
-        <div className="bg-white p-6 rounded-[40px] shadow-sm border border-slate-200 mb-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
-            
-            {/* Template de Secuencia */}
-            <div className="lg:col-span-3 space-y-3">
-              <div className="flex items-center justify-between px-1">
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Template de Secuencia</label>
-                <p className="text-[10px] text-indigo-500 font-bold uppercase tracking-tight bg-indigo-50 px-2 py-0.5 rounded-md">
-                  Siguiente: {(tempMonth || "MM")}-FC{String((lastSeqNum + 1)).padStart(2, '0')}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          {/* Left Column: Dropzone & Table */}
+          <div className="lg:col-span-9 space-y-4">
+            {/* Drop Zone (Matrix Style) */}
+            <div 
+              onDragOver={(e) => { 
+                e.preventDefault(); 
+                e.stopPropagation();
+                if (e.dataTransfer) {
+                  e.dataTransfer.dropEffect = 'copy';
+                }
+              }}
+              onDragEnter={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dragCounter.current++;
+                if (e.dataTransfer?.types.includes('Files')) {
+                  setIsDragging(true);
+                }
+              }}
+              onDragLeave={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                dragCounter.current--;
+                if (dragCounter.current === 0) {
+                  setIsDragging(false);
+                }
+              }}
+              onDrop={(e) => { 
+                e.preventDefault(); 
+                e.stopPropagation();
+                dragCounter.current = 0;
+                setIsDragging(false); 
+                if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                  addFilesToQueue(e.dataTransfer.files); 
+                }
+              }}
+              className={`
+                relative p-6 border border-emerald-500/30 rounded flex flex-col items-center justify-center transition-all duration-300 overflow-hidden
+                ${isDragging ? 'bg-emerald-500/10 border-emerald-400 scale-[0.99] shadow-[0_0_20px_rgba(16,185,129,0.2)]' : 'bg-black hover:border-emerald-500/50 shadow-inner'}
+                cursor-pointer group min-h-[160px]
+              `}
+              onClick={() => document.getElementById('file-upload')?.click()}
+            >
+              {/* Matrix Rain Effect Background (CSS only) */}
+              <div className="absolute inset-0 opacity-5 pointer-events-none overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-full flex justify-around text-[8px] leading-none">
+                  {[...Array(20)].map((_, i) => (
+                    <div key={i} className="animate-matrix-rain" style={{ animationDelay: `${Math.random() * 5}s` }}>
+                      {Math.random().toString(36).substring(2, 15).repeat(10)}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <input id="file-upload" type="file" multiple className="hidden" onChange={(e) => e.target.files && addFilesToQueue(e.target.files)} accept="image/*,application/pdf" />
+              
+              <div className={`w-12 h-12 rounded border border-emerald-500/50 flex items-center justify-center mb-3 text-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)] transition-all group-hover:scale-110 ${isBatchProcessing ? 'animate-pulse bg-emerald-500/20' : ''}`}>
+                 {isBatchProcessing ? (
+                   <svg className="w-6 h-6 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                 ) : (
+                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+                 )}
+              </div>
+              
+              <p className="text-sm font-black text-emerald-400 mb-1 tracking-[0.3em] uppercase">
+                {isBatchProcessing ? ">> PROCESANDO_DATOS_NEURALES <<" : ">> ARRASTRAR_FACTURAS_AQUÍ <<"}
+              </p>
+              <div className="flex items-center gap-2 opacity-50">
+                <span className="text-[8px] font-black uppercase tracking-widest">Formatos: PDF | JPG | PNG</span>
+              </div>
+
+              {/* Scan Line Effect */}
+              <div className="absolute top-0 left-0 w-full h-1 bg-emerald-500/20 animate-scan-line pointer-events-none"></div>
+            </div>
+
+            {/* Table (Matrix Style) */}
+            <div className="bg-black rounded border border-emerald-900/50 overflow-hidden shadow-2xl">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-emerald-950/30 border-b border-emerald-900/50">
+                      <th className="px-3 py-2">
+                        <button onClick={() => handleSort('fileName')} className="flex items-center text-[8px] font-black text-emerald-600 uppercase tracking-widest hover:text-emerald-400 transition-colors">
+                          ORIGIN_FILE <SortIcon column="fileName" />
+                        </button>
+                      </th>
+                      <th className="px-3 py-2">
+                        <button onClick={() => handleSort('proveedor')} className="flex items-center text-[8px] font-black text-emerald-600 uppercase tracking-widest hover:text-emerald-400 transition-colors">
+                          VENDOR <SortIcon column="proveedor" />
+                        </button>
+                      </th>
+                      <th className="px-3 py-2">
+                        <button onClick={() => handleSort('fechaFactura')} className="flex items-center text-[8px] font-black text-emerald-600 uppercase tracking-widest hover:text-emerald-400 transition-colors">
+                          DATE <SortIcon column="fechaFactura" />
+                        </button>
+                      </th>
+                      <th className="px-3 py-2">
+                        <button onClick={() => handleSort('numeroFactura')} className="flex items-center text-[8px] font-black text-emerald-600 uppercase tracking-widest hover:text-emerald-400 transition-colors">
+                          INV_NUM <SortIcon column="numeroFactura" />
+                        </button>
+                      </th>
+                      <th className="px-3 py-2">
+                        <button onClick={() => handleSort('importe')} className="flex items-center text-[8px] font-black text-emerald-600 uppercase tracking-widest hover:text-emerald-400 transition-colors">
+                          AMOUNT <SortIcon column="importe" />
+                        </button>
+                      </th>
+                      <th className="px-3 py-2 text-[8px] font-black text-emerald-600 uppercase tracking-widest">CMD</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-emerald-900/20">
+                    {sortedInvoices.length === 0 ? (
+                      <tr><td colSpan={6} className="px-3 py-6 text-center text-emerald-900 italic text-[10px] uppercase tracking-widest">No_Data_In_Queue</td></tr>
+                    ) : (
+                      sortedInvoices.map((inv) => (
+                        <tr key={inv.internalId} className={`hover:bg-emerald-500/5 transition-colors group ${inv.isDuplicate ? 'bg-rose-950/20' : ''}`}>
+                          <td className="px-3 py-2">
+                            <div className="flex flex-col">
+                               <div className="flex items-center gap-2">
+                                 <span className={`text-[10px] font-bold truncate max-w-[120px] ${inv.isDuplicate ? 'text-rose-500 line-through opacity-50' : 'text-emerald-400'}`} title={inv.fileName}>
+                                   {inv.fileName}
+                                 </span>
+                                 {inv.status === ProcessingStatus.COMPLETED && !inv.isDuplicate && (
+                                   <span className="text-[7px] text-emerald-300 font-black bg-emerald-900/50 px-1 py-0.5 rounded border border-emerald-500/30 uppercase tracking-tighter">
+                                     {" > "} {inv.renamedFileName}
+                                   </span>
+                                 )}
+                               </div>
+                               <span className="text-[6px] font-black text-emerald-900 uppercase mt-0.5 tracking-widest">HASH: {inv.internalId.split('-').pop()}</span>
+                            </div>
+                          </td>
+                          <td className="px-3 py-2">
+                            <div className="text-[10px] font-black text-emerald-200">{inv.proveedor}</div>
+                            {inv.shortenedProveedor !== '-' && <div className="text-[7px] text-emerald-500 font-black uppercase tracking-widest mt-0.5">{inv.shortenedProveedor}</div>}
+                          </td>
+                          <td className="px-3 py-2 text-[10px] text-emerald-600 font-bold">{formatSpanishDate(inv.fechaFactura)}</td>
+                          <td className="px-3 py-2 text-[10px] text-emerald-600 font-bold">{inv.numeroFactura}</td>
+                          <td className="px-3 py-2 text-[10px] font-black text-emerald-400">
+                            {inv.status === ProcessingStatus.COMPLETED ? (
+                              <span className="bg-emerald-950/50 px-1.5 py-0.5 rounded border border-emerald-500/20">
+                                {formatSpanishAmount(inv.importe)}€
+                              </span>
+                            ) : '-'}
+                          </td>
+                          <td className="px-3 py-2">
+                            <div className="flex items-center gap-1.5">
+                              {inv.status === ProcessingStatus.PENDING || inv.status === ProcessingStatus.FAILED ? (
+                                <button
+                                  onClick={() => processSingleInvoice(inv.internalId)}
+                                  disabled={isBatchProcessing}
+                                  className="p-1 bg-emerald-600 text-black hover:bg-emerald-400 rounded transition-all disabled:opacity-30 active:scale-95"
+                                  title="Escanear"
+                                >
+                                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                                </button>
+                              ) : inv.status === ProcessingStatus.PROCESSING ? (
+                                 <div className="w-3 h-3 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>
+                              ) : inv.isDuplicate ? (
+                                 <span className="text-[6px] font-black text-rose-500 uppercase border border-rose-500/30 px-1 py-0.5 rounded">DUP</span>
+                              ) : inv.status === ProcessingStatus.COMPLETED ? (
+                                 <div className="flex items-center gap-1">
+                                   <button 
+                                     onClick={() => downloadOneRenamed(inv)}
+                                     className="p-1 text-emerald-500 hover:bg-emerald-500 hover:text-black rounded transition-all border border-emerald-500/30 active:scale-90"
+                                     title="Descargar"
+                                   >
+                                     <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                   </button>
+                                 </div>
+                              ) : null}
+                              <button
+                                onClick={() => removeInvoice(inv.internalId)}
+                                disabled={isBatchProcessing}
+                                className="p-1 text-emerald-900 hover:text-rose-500 transition-all disabled:opacity-20 active:scale-90"
+                                title="Eliminar"
+                              >
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Controls & Stats */}
+          <div className="lg:col-span-3 space-y-4">
+            {/* Control Center (Vertical) */}
+            <div className="bg-black p-4 rounded border border-emerald-900/50 shadow-2xl space-y-4">
+              <h2 className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] border-b border-emerald-900/30 pb-2">Control_Panel</h2>
+              
+              {/* Template de Secuencia */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-[8px] font-black text-emerald-700 uppercase tracking-widest">Sequence_Template</label>
+                </div>
+                <div className="flex items-center bg-emerald-950/20 border border-emerald-900/50 rounded p-1 focus-within:border-emerald-500 transition-all h-[36px]">
+                  <input 
+                    type="text" 
+                    placeholder="MM"
+                    value={tempMonth}
+                    onChange={handleMonthChange}
+                    className="w-12 text-center bg-transparent text-[10px] font-black text-emerald-400 outline-none placeholder:text-emerald-900"
+                  />
+                  <div className="h-3 w-[1px] bg-emerald-900 mx-1"></div>
+                  <span className="text-[8px] font-black text-emerald-700 px-1 select-none">FC</span>
+                  <div className="h-3 w-[1px] bg-emerald-900 mx-1"></div>
+                  <input 
+                    ref={seqInputRef}
+                    type="text" 
+                    placeholder="SEQ"
+                    value={tempLastSeq}
+                    onChange={handleSeqChange}
+                    className="w-full text-center bg-transparent text-[10px] font-black text-emerald-400 outline-none placeholder:text-emerald-900"
+                  />
+                </div>
+                <p className="text-[7px] text-emerald-600 font-bold uppercase tracking-tight text-center">
+                  Next: {(tempMonth || "MM")}-FC{String((lastSeqNum + 1)).padStart(2, '0')}
                 </p>
               </div>
-              <div className="flex items-center bg-slate-50 border border-slate-200 rounded-2xl p-2 focus-within:ring-2 focus-within:ring-indigo-100 focus-within:border-indigo-400 transition-all h-[56px]">
-                <input 
-                  type="text" 
-                  placeholder="Mes"
-                  value={tempMonth}
-                  onChange={handleMonthChange}
-                  className="w-full text-center bg-transparent text-sm font-black text-slate-700 outline-none placeholder:text-slate-300"
-                />
-                <div className="h-6 w-[1px] bg-slate-200 mx-2"></div>
-                <span className="text-xs font-black text-slate-400 px-3 select-none">FC</span>
-                <div className="h-6 w-[1px] bg-slate-200 mx-2"></div>
-                <input 
-                  ref={seqInputRef}
-                  type="text" 
-                  placeholder="Última"
-                  value={tempLastSeq}
-                  onChange={handleSeqChange}
-                  className="w-full text-center bg-transparent text-sm font-black text-slate-700 outline-none placeholder:text-slate-300"
-                />
-              </div>
-            </div>
 
-            {/* Acciones Principales */}
-            <div className="lg:col-span-6 flex flex-wrap sm:flex-nowrap gap-3">
-              <button
-                onClick={processAllInvoices}
-                disabled={isBatchProcessing || !invoices.some(i => i.status === ProcessingStatus.PENDING || i.status === ProcessingStatus.FAILED)}
-                className={`
-                  flex-1 h-[56px] rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-lg flex items-center justify-center gap-3
-                  ${isBatchProcessing 
-                    ? 'bg-amber-100 text-amber-700 border border-amber-200' 
-                    : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-indigo-200 active:scale-95 disabled:opacity-50'}
-                `}
-              >
-                {isBatchProcessing ? (
-                  <>
-                    <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Procesando...
-                  </>
-                ) : (
-                  <>
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                    Procesar Todas
-                  </>
-                )}
-              </button>
-
-              <button
-                onClick={downloadAllRenamed}
-                disabled={!invoices.some(i => i.status === ProcessingStatus.COMPLETED && !i.isDuplicate)}
-                className="flex-1 h-[56px] rounded-2xl font-black text-xs uppercase tracking-widest transition-all bg-indigo-600 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                Descargar Lote
-              </button>
-            </div>
-
-            {/* Acciones Secundarias */}
-            <div className="lg:col-span-3 flex gap-3">
-              <button
-                onClick={() => {
-                  const tsv = generateTSV(invoices, tempMonth, lastSeqNum);
-                  setGeneratedTSV(tsv);
-                  setShowTSVModal(true);
-                  setCopyStatus("Copiar");
-                }}
-                disabled={invoices.length === 0}
-                className="flex-1 h-[56px] rounded-2xl font-black text-xs uppercase tracking-widest transition-all bg-emerald-600 text-white hover:bg-emerald-700 shadow-lg shadow-emerald-200 active:scale-95 disabled:opacity-50 flex items-center justify-center gap-3"
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
-                Copiar TSV
-              </button>
-
+              {/* Acciones Principales (Vertical Stack) */}
               <div className="flex flex-col gap-2">
+                <button
+                  onClick={processAllInvoices}
+                  disabled={isBatchProcessing || !invoices.some(i => i.status === ProcessingStatus.PENDING || i.status === ProcessingStatus.FAILED)}
+                  className={`
+                    w-full h-[36px] rounded font-black text-[9px] uppercase tracking-widest transition-all flex items-center justify-center gap-2
+                    ${isBatchProcessing 
+                      ? 'bg-amber-900/20 text-amber-500 border border-amber-500/30' 
+                      : 'bg-emerald-600 text-black hover:bg-emerald-400 active:scale-95 disabled:opacity-30'}
+                  `}
+                >
+                  {isBatchProcessing ? (
+                    <>
+                      <div className="w-3 h-3 border-2 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                      Run_All
+                    </>
+                  )}
+                </button>
+
+                <button
+                  onClick={downloadAllRenamed}
+                  disabled={!invoices.some(i => i.status === ProcessingStatus.COMPLETED && !i.isDuplicate)}
+                  className="w-full h-[36px] rounded font-black text-[9px] uppercase tracking-widest transition-all bg-emerald-900/20 text-emerald-500 border border-emerald-500/30 hover:bg-emerald-900/40 active:scale-95 disabled:opacity-30 flex items-center justify-center gap-2"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                  Batch_Export
+                </button>
+
+                <button
+                  onClick={() => {
+                    const tsv = generateTSV(invoices, tempMonth, lastSeqNum);
+                    setGeneratedTSV(tsv);
+                    setShowTSVModal(true);
+                    setCopyStatus("Copiar");
+                  }}
+                  disabled={invoices.length === 0}
+                  className="w-full h-[36px] rounded font-black text-[9px] uppercase tracking-widest transition-all bg-emerald-900/20 text-emerald-500 border border-emerald-500/30 hover:bg-emerald-900/40 active:scale-95 disabled:opacity-30 flex items-center justify-center gap-2"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                  Copy_TSV
+                </button>
+              </div>
+
+              {/* Secondary Actions */}
+              <div className="flex gap-2 pt-2 border-t border-emerald-900/30">
                 {isBatchProcessing && (
                   <button
                     onClick={handleStopProcessing}
-                    className="w-[56px] h-[56px] rounded-2xl font-bold text-xs uppercase transition-all bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100 active:scale-95 flex items-center justify-center shadow-sm animate-in zoom-in duration-200"
-                    title="Detener proceso"
+                    className="flex-1 h-[32px] rounded font-bold text-[8px] uppercase transition-all bg-rose-950/50 text-rose-500 border border-rose-500/30 hover:bg-rose-900/50 active:scale-95 flex items-center justify-center"
                   >
-                    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                      <rect x="6" y="6" width="12" height="12" rx="2" />
-                    </svg>
+                    Abort
                   </button>
                 )}
                 <button
                   onClick={handleReset}
                   disabled={invoices.length === 0 || isBatchProcessing}
-                  className="w-[56px] h-[56px] rounded-2xl font-bold text-xs uppercase transition-all bg-slate-50 text-slate-400 border border-slate-200 hover:text-rose-600 hover:border-rose-200 active:scale-95 disabled:opacity-30 flex items-center justify-center shadow-sm"
-                  title="Reiniciar todo"
+                  className="flex-1 h-[32px] rounded font-bold text-[8px] uppercase transition-all bg-emerald-950/10 text-emerald-900 border border-emerald-900/30 hover:text-rose-500 hover:border-rose-500/30 active:scale-95 disabled:opacity-10 flex items-center justify-center"
                 >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                  Reset_System
                 </button>
               </div>
             </div>
 
-            {/* Botón Flotante de Duplicados (si existen) */}
+            <StatsCards invoices={invoices} />
+
+            {/* Duplicates Alert */}
             {invoices.some(i => i.isDuplicate) && (
-              <div className="lg:col-span-12 flex justify-center -mt-2">
-                <button
-                  onClick={handleCleanDuplicates}
-                  disabled={isBatchProcessing}
-                  className="px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest transition-all bg-rose-100 text-rose-700 hover:bg-rose-200 border border-rose-200 shadow-sm flex items-center gap-2 animate-in slide-in-from-top-2 duration-300"
-                >
-                  <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                  Limpiar {invoices.filter(i => i.isDuplicate).length} Duplicados Detectados
-                </button>
-              </div>
+              <button
+                onClick={handleCleanDuplicates}
+                disabled={isBatchProcessing}
+                className="w-full py-2 rounded font-black text-[8px] uppercase tracking-widest transition-all bg-rose-950/50 text-rose-500 border border-rose-500/30 hover:bg-rose-900/50 flex items-center justify-center gap-2 animate-pulse"
+              >
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                Purge_{invoices.filter(i => i.isDuplicate).length}_Duplicates
+              </button>
             )}
           </div>
         </div>
 
-        <StatsCards invoices={invoices} />
-
-        {/* Drop Zone */}
-        <div 
-          onDragOver={(e) => { 
-            e.preventDefault(); 
-            e.stopPropagation();
-            if (e.dataTransfer) {
-              e.dataTransfer.dropEffect = 'copy';
-            }
-          }}
-          onDragEnter={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            dragCounter.current++;
-            if (e.dataTransfer?.types.includes('Files')) {
-              setIsDragging(true);
-            }
-          }}
-          onDragLeave={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            dragCounter.current--;
-            if (dragCounter.current === 0) {
-              setIsDragging(false);
-            }
-          }}
-          onDrop={(e) => { 
-            e.preventDefault(); 
-            e.stopPropagation();
-            dragCounter.current = 0;
-            setIsDragging(false); 
-            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-              addFilesToQueue(e.dataTransfer.files); 
-            }
-          }}
-          className={`
-            relative mb-10 p-16 border-2 border-dashed rounded-[48px] flex flex-col items-center justify-center transition-all duration-500
-            ${isDragging ? 'border-indigo-500 bg-indigo-50/50 scale-[0.99] shadow-inner' : 'border-slate-200 bg-white hover:border-indigo-300 hover:bg-slate-50/50 shadow-sm'}
-            cursor-pointer group
-          `}
-          onClick={() => document.getElementById('file-upload')?.click()}
-        >
-          <input id="file-upload" type="file" multiple className="hidden" onChange={(e) => e.target.files && addFilesToQueue(e.target.files)} accept="image/*,application/pdf" />
-          <div className="w-24 h-24 bg-indigo-50 rounded-[32px] flex items-center justify-center mb-8 text-indigo-600 shadow-sm transition-transform group-hover:scale-110 group-hover:rotate-3">
-             <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-          </div>
-          <p className="text-3xl font-black text-slate-900 mb-3 tracking-tight">Suelta tus facturas aquí</p>
-          <div className="flex items-center gap-3">
-            <span className="px-3 py-1 bg-slate-100 text-slate-500 text-[10px] font-black uppercase tracking-widest rounded-full">PDF</span>
-            <span className="px-3 py-1 bg-slate-100 text-slate-500 text-[10px] font-black uppercase tracking-widest rounded-full">JPG</span>
-            <span className="px-3 py-1 bg-slate-100 text-slate-500 text-[10px] font-black uppercase tracking-widest rounded-full">PNG</span>
-          </div>
-        </div>
-
-        {/* Table */}
-        <div className="bg-white rounded-[40px] shadow-sm border border-slate-200 overflow-hidden mb-16">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="bg-slate-50/50 border-b border-slate-100">
-                  <th className="px-8 py-6">
-                    <button onClick={() => handleSort('fileName')} className="flex items-center text-[11px] font-black text-slate-400 uppercase tracking-widest hover:text-indigo-600 transition-colors">
-                      Archivo Original <SortIcon column="fileName" />
-                    </button>
-                  </th>
-                  <th className="px-8 py-6">
-                    <button onClick={() => handleSort('proveedor')} className="flex items-center text-[11px] font-black text-slate-400 uppercase tracking-widest hover:text-indigo-600 transition-colors">
-                      Proveedor <SortIcon column="proveedor" />
-                    </button>
-                  </th>
-                  <th className="px-8 py-6">
-                    <button onClick={() => handleSort('fechaFactura')} className="flex items-center text-[11px] font-black text-slate-400 uppercase tracking-widest hover:text-indigo-600 transition-colors">
-                      Fecha <SortIcon column="fechaFactura" />
-                    </button>
-                  </th>
-                  <th className="px-8 py-6">
-                    <button onClick={() => handleSort('numeroFactura')} className="flex items-center text-[11px] font-black text-slate-400 uppercase tracking-widest hover:text-indigo-600 transition-colors">
-                      Nº Factura <SortIcon column="numeroFactura" />
-                    </button>
-                  </th>
-                  <th className="px-8 py-6">
-                    <button onClick={() => handleSort('importe')} className="flex items-center text-[11px] font-black text-slate-400 uppercase tracking-widest hover:text-indigo-600 transition-colors">
-                      Importe <SortIcon column="importe" />
-                    </button>
-                  </th>
-                  <th className="px-8 py-6 text-[11px] font-black text-slate-400 uppercase tracking-widest">Control</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-50">
-                {sortedInvoices.length === 0 ? (
-                  <tr><td colSpan={6} className="px-8 py-24 text-center text-slate-300 italic font-medium">No hay facturas en la cola.</td></tr>
-                ) : (
-                  sortedInvoices.map((inv) => (
-                    <tr key={inv.internalId} className={`hover:bg-slate-50/50 transition-colors group ${inv.isDuplicate ? 'bg-rose-50/30' : ''}`}>
-                      <td className="px-8 py-6">
-                        <div className="flex flex-col">
-                           <div className="flex items-center gap-3">
-                             <span className={`text-sm font-bold truncate max-w-[180px] ${inv.isDuplicate ? 'text-rose-900 line-through opacity-40' : 'text-slate-900'}`} title={inv.fileName}>
-                               {inv.fileName}
-                             </span>
-                             {inv.status === ProcessingStatus.COMPLETED && !inv.isDuplicate && (
-                               <span className="text-xs text-indigo-600 font-black bg-indigo-50 px-3 py-1.5 rounded-xl border border-indigo-100/50 uppercase tracking-tight shadow-sm whitespace-nowrap">
-                                 → {inv.renamedFileName}
-                               </span>
-                             )}
-                           </div>
-                           <span className="text-[9px] font-black text-slate-300 uppercase mt-1 tracking-widest">ID: {inv.internalId.split('-').pop()}</span>
-                        </div>
-                      </td>
-                      <td className="px-8 py-6">
-                        <div className="text-sm font-black text-slate-900">{inv.proveedor}</div>
-                        {inv.shortenedProveedor !== '-' && <div className="text-[10px] text-indigo-500 font-black uppercase tracking-widest mt-1">{inv.shortenedProveedor}</div>}
-                      </td>
-                      <td className="px-8 py-6 text-sm text-slate-500 font-bold">{formatSpanishDate(inv.fechaFactura)}</td>
-                      <td className="px-8 py-6 text-sm text-slate-500 font-bold">{inv.numeroFactura}</td>
-                      <td className="px-8 py-6 text-sm font-black text-slate-900">
-                        {inv.status === ProcessingStatus.COMPLETED ? (
-                          <span className="bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200/50">
-                            {formatSpanishAmount(inv.importe)}€
-                          </span>
-                        ) : '-'}
-                      </td>
-                      <td className="px-8 py-6">
-                        <div className="flex items-center gap-3">
-                          <div className="flex-1 flex items-center gap-2">
-                            {inv.status === ProcessingStatus.PENDING || inv.status === ProcessingStatus.FAILED ? (
-                              <button
-                                onClick={() => processSingleInvoice(inv.internalId)}
-                                disabled={isBatchProcessing}
-                                className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white hover:bg-indigo-700 rounded-2xl transition-all text-[10px] font-black uppercase tracking-widest shadow-lg shadow-indigo-100 disabled:opacity-30 active:scale-95"
-                              >
-                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-                                Escanear
-                              </button>
-                            ) : inv.status === ProcessingStatus.PROCESSING ? (
-                               <span className="text-[9px] font-black text-amber-600 animate-pulse uppercase bg-amber-50 border border-amber-200 px-3 py-2 rounded-xl tracking-widest">Procesando...</span>
-                            ) : inv.isDuplicate ? (
-                               <div className="flex flex-col gap-1.5 items-start">
-                                 <div className="flex items-center gap-1.5 px-3 py-1.5 bg-rose-600 text-white rounded-xl shadow-lg shadow-rose-100">
-                                    <span className="text-[9px] font-black tracking-widest uppercase">Duplicado</span>
-                                 </div>
-                                 <span className="text-[9px] text-rose-400 font-bold italic max-w-[140px] truncate" title={inv.duplicateOfName}>
-                                   Original: {inv.duplicateOfName}
-                                 </span>
-                               </div>
-                            ) : inv.status === ProcessingStatus.COMPLETED ? (
-                               <div className="flex items-center gap-3">
-                                 <span className="text-[9px] font-black text-emerald-600 uppercase bg-emerald-50 border border-emerald-100 px-3 py-2 rounded-xl tracking-widest">Completado</span>
-                                 <button 
-                                   draggable
-                                   onDragStart={(e) => {
-                                     const file = (window as any)[`file_${inv.internalId}`];
-                                     if (file && inv.renamedFileName) {
-                                       const url = URL.createObjectURL(file);
-                                       e.dataTransfer.effectAllowed = "copy";
-                                       // Formato DownloadURL: mime:filename:url
-                                       const downloadData = `${file.type}:${inv.renamedFileName}:${url}`;
-                                       e.dataTransfer.setData("DownloadURL", downloadData);
-                                       // También añadir como texto por si acaso
-                                       e.dataTransfer.setData("text/plain", inv.renamedFileName);
-                                     }
-                                   }}
-                                   onClick={() => downloadOneRenamed(inv)}
-                                   className="p-2.5 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-2xl transition-all border border-indigo-100 shadow-sm active:scale-90 cursor-grab active:cursor-grabbing"
-                                   title="Arrastra este icono a una carpeta para descargar o haz clic"
-                                 >
-                                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                                 </button>
-                               </div>
-                            ) : null}
-                          </div>
-                          {/* Botón de Eliminar */}
-                          <button
-                            onClick={() => removeInvoice(inv.internalId)}
-                            disabled={isBatchProcessing}
-                            className="p-2.5 text-slate-300 hover:text-rose-600 hover:bg-rose-50 rounded-2xl transition-all border border-transparent hover:border-rose-100 disabled:opacity-20 active:scale-90"
-                            title="Eliminar registro"
-                          >
-                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* TSV Modal */}
+        {/* TSV Modal (Matrix Style) */}
         {showTSVModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-            <div className="bg-white rounded-[40px] shadow-2xl w-full max-w-5xl overflow-hidden animate-in zoom-in-95 duration-200">
-              <div className="px-10 py-8 border-b flex items-center justify-between bg-slate-50/30">
-                <h3 className="font-black text-slate-800 tracking-tight uppercase text-sm flex items-center gap-3">
-                  <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center shadow-inner">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17v-2m3 2v-4m3 2v-6m10 10V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2z"/></svg>
-                  </div>
-                  Exportación Inteligente para Excel
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+            <div className="bg-black rounded border border-emerald-500 shadow-[0_0_50px_rgba(16,185,129,0.2)] w-full max-w-4xl overflow-hidden animate-in zoom-in-95 duration-200">
+              <div className="px-6 py-3 border-b border-emerald-900/50 flex items-center justify-between bg-emerald-950/20">
+                <h3 className="font-black text-emerald-400 tracking-[0.2em] uppercase text-[10px] flex items-center gap-2.5">
+                  {" >> "} EXPORT_DATA_STREAM_FOR_EXCEL
                 </h3>
-                <button onClick={() => setShowTSVModal(false)} className="text-slate-400 hover:text-slate-600 transition-all p-3 bg-white rounded-full shadow-sm hover:rotate-90">✕</button>
+                <button onClick={() => setShowTSVModal(false)} className="text-emerald-700 hover:text-emerald-400 transition-all p-1">✕</button>
               </div>
-              <div className="p-10">
+              <div className="p-6">
                 <textarea
                   readOnly
                   value={generatedTSV}
-                  className="w-full h-96 p-8 font-mono text-[11px] bg-slate-900 text-slate-300 rounded-[32px] border-none focus:ring-0 leading-relaxed overflow-x-auto shadow-2xl"
+                  className="w-full h-80 p-4 font-mono text-[9px] bg-emerald-950/10 text-emerald-500 rounded border border-emerald-900/50 focus:ring-1 focus:ring-emerald-500 outline-none leading-relaxed overflow-x-auto shadow-inner"
                   wrap="off"
                 />
-                <div className="mt-10 flex justify-between items-center">
-                   <p className="text-xs text-slate-400 font-medium max-w-md">
-                     Copia estos datos y pégalos directamente en Excel. Los duplicados se han mantenido como solicitaste.
+                <div className="mt-6 flex justify-between items-center">
+                   <p className="text-[8px] text-emerald-800 font-medium max-w-xs uppercase tracking-wider">
+                     // Data_Ready_For_Buffer_Transfer. Copy_And_Paste_To_Target_Spreadsheet.
                    </p>
                    <button
                     onClick={async () => {
                       await navigator.clipboard.writeText(generatedTSV);
-                      setCopyStatus("¡Copiado!");
-                      setTimeout(() => setCopyStatus("Copiar"), 2000);
+                      setCopyStatus("COPIED");
+                      setTimeout(() => setCopyStatus("COPY_BUFFER"), 2000);
                     }}
-                    className="bg-indigo-600 text-white px-12 py-5 rounded-[24px] font-black text-xs uppercase tracking-widest hover:bg-indigo-700 transition-all active:scale-95 shadow-2xl shadow-indigo-100 flex items-center gap-3"
+                    className="bg-emerald-600 text-black px-8 py-2 rounded font-black text-[10px] uppercase tracking-widest hover:bg-emerald-400 transition-all active:scale-95 shadow-[0_0_20px_rgba(16,185,129,0.2)] flex items-center gap-2"
                   >
-                    {copyStatus === "¡Copiado!" ? <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg> : <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>}
+                    {copyStatus === "COPIED" ? <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"/></svg> : <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>}
                     {copyStatus}
                   </button>
                 </div>
@@ -684,6 +674,7 @@ const App: React.FC = () => {
         )}
       </div>
     </div>
+
   );
 };
 
