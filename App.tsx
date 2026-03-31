@@ -192,6 +192,28 @@ const App: React.FC = () => {
     }
   };
 
+  const downloadInvoice = (inv: InvoiceData) => {
+    const file = (window as any)[`file_${inv.internalId}`] as File;
+    if (!file || !inv.renamedFileName) return;
+    
+    const url = URL.createObjectURL(file);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = inv.renamedFileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const downloadAllInvoices = () => {
+    invoices.forEach(inv => {
+      if (inv.status === ProcessingStatus.COMPLETED && !inv.isDuplicate) {
+        downloadInvoice(inv);
+      }
+    });
+  };
+
   const processAllInvoices = async () => {
     const toProcess = invoices.filter(i => 
       i.status === ProcessingStatus.PENDING || i.status === ProcessingStatus.FAILED
@@ -385,12 +407,39 @@ const App: React.FC = () => {
                     <button onClick={processAllInvoices} disabled={isBatchProcessing || invoices.length === 0} className="h-12 px-6 bg-emerald-600 text-white rounded-none font-black text-xs uppercase tracking-widest hover:bg-emerald-700 transition-all flex items-center gap-2 disabled:opacity-30">
                       <Play className="w-4 h-4" fill="currentColor" /> Ejecutar
                     </button>
+                    <button onClick={downloadAllInvoices} disabled={isBatchProcessing || !invoices.some(i => i.status === ProcessingStatus.COMPLETED)} className="h-12 px-6 bg-indigo-600 text-white rounded-none font-black text-xs uppercase tracking-widest hover:bg-indigo-700 transition-all flex items-center gap-2 disabled:opacity-30">
+                      <Download className="w-4 h-4" /> Descargar
+                    </button>
                     <button onClick={() => { const tsv = generateTSV(invoices, tempMonth, lastSeqNum); setGeneratedTSV(tsv); setShowTSVModal(true); }} disabled={isBatchProcessing || invoices.length === 0} className="h-12 px-6 bg-slate-100 text-slate-700 rounded-none font-black text-xs uppercase tracking-widest hover:bg-slate-200 transition-all flex items-center gap-2 disabled:opacity-30 border border-slate-200">
                       <FileSpreadsheet className="w-4 h-4" /> Exportar
                     </button>
                     <button onClick={handleReset} disabled={isBatchProcessing || invoices.length === 0} className="h-12 px-6 bg-slate-100 text-slate-500 rounded-none font-black text-xs uppercase tracking-widest hover:bg-rose-50 hover:text-rose-600 transition-all flex items-center gap-2 disabled:opacity-30 border border-slate-200">
                       <Trash2 className="w-4 h-4" /> Reset
                     </button>
+                  </div>
+
+                  <div className="flex items-center gap-4 bg-slate-50 p-2 border border-slate-200">
+                    <div className="flex flex-col">
+                      <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Mes Fijo</span>
+                      <input 
+                        type="text" 
+                        value={tempMonth} 
+                        onChange={handleMonthChange}
+                        placeholder="MM"
+                        className="w-12 h-8 bg-white border border-slate-200 text-center font-mono text-xs font-bold focus:border-emerald-500 outline-none"
+                      />
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">Último Nº</span>
+                      <input 
+                        ref={seqInputRef}
+                        type="text" 
+                        value={tempLastSeq} 
+                        onChange={handleSeqChange}
+                        placeholder="00"
+                        className="w-16 h-8 bg-white border border-slate-200 text-center font-mono text-xs font-bold focus:border-emerald-500 outline-none"
+                      />
+                    </div>
                   </div>
 
                   <div className="flex gap-4">
@@ -463,7 +512,8 @@ const App: React.FC = () => {
                   <th className="px-8 py-4 console-label text-right cursor-pointer" onClick={() => handleSort('importe')}>
                     <div className="flex items-center justify-end gap-2">IMPORTE <SortIcon column="importe" /></div>
                   </th>
-                  <th className="px-8 py-4 console-label">DOC_EXT</th>
+                  <th className="px-8 py-4 console-label">DOC_FINAL</th>
+                  <th className="px-8 py-4 console-label">DOC_ORIG</th>
                   <th className="px-8 py-4 console-label text-center">CMD</th>
                 </tr>
               </thead>
@@ -498,21 +548,32 @@ const App: React.FC = () => {
                           <span className="text-emerald-600 font-bold text-xs">{formatSpanishAmount(inv.importe)}</span>
                         </td>
                         <td className="px-8 py-4">
-                          <span className="text-slate-400 text-[10px] truncate max-w-[150px] block">{inv.fileName}</span>
+                          <span className="text-indigo-600 font-bold text-[10px] truncate max-w-[200px] block">
+                            {inv.renamedFileName || '---'}
+                          </span>
+                        </td>
+                        <td className="px-8 py-4">
+                          <span className="text-slate-400 text-[10px] truncate max-w-[120px] block">{inv.fileName}</span>
                         </td>
                         <td className="px-8 py-4">
                           <div className="flex items-center justify-center gap-3">
                             {inv.status === ProcessingStatus.COMPLETED ? (
-                              <span className="badge-ok">OK</span>
+                              <button onClick={() => downloadInvoice(inv)} className="text-indigo-600 hover:text-indigo-800 transition-colors" title="Descargar">
+                                <Download className="w-4 h-4" />
+                              </button>
                             ) : inv.status === ProcessingStatus.PROCESSING ? (
                               <span className="badge-ocr">OCR...</span>
                             ) : inv.status === ProcessingStatus.FAILED ? (
-                              <span className="badge-err">ERR</span>
+                              <button onClick={() => processSingleInvoice(inv.internalId)} className="text-rose-500 hover:text-rose-700 transition-colors" title="Reintentar">
+                                <Play className="w-4 h-4" />
+                              </button>
                             ) : (
-                              <span className="text-[10px] text-slate-400">WAIT</span>
+                              <button onClick={() => processSingleInvoice(inv.internalId)} className="text-emerald-600 hover:text-emerald-800 transition-colors" title="Procesar">
+                                <Play className="w-4 h-4" />
+                              </button>
                             )}
-                            <button onClick={() => removeInvoice(inv.internalId)} className="text-slate-400 hover:text-rose-500 transition-colors">
-                              <X className="w-3 h-3" />
+                            <button onClick={() => removeInvoice(inv.internalId)} className="text-slate-300 hover:text-rose-500 transition-colors" title="Eliminar">
+                              <X className="w-4 h-4" />
                             </button>
                           </div>
                         </td>
