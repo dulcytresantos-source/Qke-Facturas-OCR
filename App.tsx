@@ -368,10 +368,13 @@ const App: React.FC = () => {
               </div>
             </div>
             <div className="h-10 w-[1px] bg-slate-200 hidden sm:block" />
-            <div className="flex items-center gap-3 bg-white px-5 py-2.5 rounded-none border border-slate-200">
+            <button 
+              onClick={() => window.open('/VERSION.txt', '_blank')}
+              className="flex items-center gap-3 bg-white px-5 py-2.5 rounded-none border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer"
+            >
               <Settings className="w-3.5 h-3.5 text-slate-400" />
-              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">v2.5.0</span>
-            </div>
+              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">v2.5.1</span>
+            </button>
           </div>
         </header>
 
@@ -668,7 +671,7 @@ const App: React.FC = () => {
         {/* Version Control */}
         <div className="fixed bottom-4 right-4 z-50">
           <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] bg-white/50 px-2 py-1 border border-slate-100">
-            v1.2.0_OCR_NIF_REORDER
+            v2.5.1_OCR_NIF_REORDER
           </span>
         </div>
       </div>
