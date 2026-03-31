@@ -18,6 +18,7 @@ export interface InvoiceData {
   isDuplicate?: boolean;
   duplicateOfName?: string; // Nombre original del archivo que ya existía
   renamedFileName?: string;
+  nif?: string;
   error?: string;
 }
 
@@ -27,4 +28,5 @@ export interface ExtractionResult {
   fechaFactura: string;
   numeroFactura: string;
   importe: number;
+  nif: string;
 }

@@ -124,6 +124,7 @@ const App: React.FC = () => {
         fechaFactura: '-',
         numeroFactura: '-',
         importe: 0,
+        nif: '-',
       };
 
       (window as any)[`file_${internalId}`] = file;
@@ -500,8 +501,8 @@ const App: React.FC = () => {
             <table className="w-full text-left border-collapse font-mono">
               <thead>
                 <tr className="border-b border-slate-100 bg-slate-50">
-                  <th className="px-8 py-4 console-label cursor-pointer" onClick={() => handleSort('fileName')}>
-                    <div className="flex items-center gap-2">DOC <SortIcon column="fileName" /></div>
+                  <th className="px-8 py-4 console-label cursor-pointer" onClick={() => handleSort('renamedFileName')}>
+                    <div className="flex items-center gap-2">DOC <SortIcon column="renamedFileName" /></div>
                   </th>
                   <th className="px-8 py-4 console-label cursor-pointer" onClick={() => handleSort('proveedor')}>
                     <div className="flex items-center gap-2">ALIAS <SortIcon column="proveedor" /></div>
@@ -512,7 +513,6 @@ const App: React.FC = () => {
                   <th className="px-8 py-4 console-label text-right cursor-pointer" onClick={() => handleSort('importe')}>
                     <div className="flex items-center justify-end gap-2">IMPORTE <SortIcon column="importe" /></div>
                   </th>
-                  <th className="px-8 py-4 console-label">DOC_FINAL</th>
                   <th className="px-8 py-4 console-label">DOC_ORIG</th>
                   <th className="px-8 py-4 console-label text-center">CMD</th>
                 </tr>
@@ -536,7 +536,9 @@ const App: React.FC = () => {
                         className={`console-row ${inv.isDuplicate ? 'bg-rose-50' : ''}`}
                       >
                         <td className="px-8 py-4">
-                          <span className="text-emerald-600 font-bold text-xs">{inv.numeroFactura || '---'}</span>
+                          <span className="text-indigo-600 font-bold text-xs truncate max-w-[250px] block">
+                            {inv.renamedFileName || '---'}
+                          </span>
                         </td>
                         <td className="px-8 py-4">
                           <span className="text-slate-700 text-xs uppercase">{inv.proveedor || '---'}</span>
@@ -546,11 +548,6 @@ const App: React.FC = () => {
                         </td>
                         <td className="px-8 py-4 text-right">
                           <span className="text-emerald-600 font-bold text-xs">{formatSpanishAmount(inv.importe)}</span>
-                        </td>
-                        <td className="px-8 py-4">
-                          <span className="text-indigo-600 font-bold text-[10px] truncate max-w-[200px] block">
-                            {inv.renamedFileName || '---'}
-                          </span>
                         </td>
                         <td className="px-8 py-4">
                           <span className="text-slate-400 text-[10px] truncate max-w-[120px] block">{inv.fileName}</span>

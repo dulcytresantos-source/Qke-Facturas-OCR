@@ -79,7 +79,7 @@ export const generateTSV = (
   templateMonth?: string, 
   lastSequence?: number
 ): string => {
-  const headers = ["Identificador", "Nombre Proveedor", "Número Factura", "Fecha Factura", "Importe", "Estado"];
+  const headers = ["Identificador", "Nombre Proveedor", "NIF", "Número Factura", "Fecha Factura", "Importe", "Estado"];
   let validIndexCounter = 0;
 
   const rows = invoices
@@ -100,6 +100,7 @@ export const generateTSV = (
       return [
         identifier,
         inv.proveedor,
+        inv.nif || "-",
         inv.numeroFactura,
         formatSpanishDate(inv.fechaFactura),
         formattedAmount,

@@ -20,7 +20,7 @@ export const extractInvoiceData = async (
             },
           },
           {
-            text: "Extrae de la factura: Proveedor, Fecha (YYYY-MM-DD), Número de factura e Importe total. También genera un 'nombre corto' para el proveedor (una sola palabra distintiva, ej: 'Boston Scientifics' -> 'Boston', 'War Medical' -> 'W. Medical'). Responde en JSON.",
+            text: "Extrae de la factura: Proveedor, NIF del proveedor, Fecha (YYYY-MM-DD), Número de factura e Importe total. También genera un 'nombre corto' para el proveedor (una sola palabra distintiva, ej: 'Boston Scientifics' -> 'Boston', 'War Medical' -> 'W. Medical'). Responde en JSON.",
           },
         ],
       },
@@ -31,12 +31,13 @@ export const extractInvoiceData = async (
         type: Type.OBJECT,
         properties: {
           proveedor: { type: Type.STRING },
+          nif: { type: Type.STRING, description: "NIF del proveedor" },
           shortenedProveedor: { type: Type.STRING, description: "Nombre distintivo corto de una sola palabra" },
           fechaFactura: { type: Type.STRING },
           numeroFactura: { type: Type.STRING },
           importe: { type: Type.NUMBER },
         },
-        required: ["proveedor", "shortenedProveedor", "fechaFactura", "numeroFactura", "importe"],
+        required: ["proveedor", "nif", "shortenedProveedor", "fechaFactura", "numeroFactura", "importe"],
       },
     },
   });
