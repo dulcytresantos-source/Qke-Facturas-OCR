@@ -12,10 +12,10 @@
 }
 
 @utility shadow-soft {
-  box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  box-shadow: none;
 }
 @utility shadow-strong {
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
 }
 @utility matrix-bg {
   background: #0a0a0a;
@@ -35,14 +35,29 @@
   box-shadow: inset 0 0 20px rgba(0, 255, 65, 0.1), 0 0 15px rgba(0, 255, 65, 0.1);
 }
 @utility glass-card {
-  @apply bg-white border border-slate-200 shadow-soft;
+  @apply bg-slate-900/40 border border-white/10 backdrop-blur-md;
 }
 @utility btn-primary {
-  @apply h-16 px-8 bg-emerald-600 text-white rounded-2xl font-black text-lg uppercase tracking-widest hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-100 flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50;
+  @apply h-16 px-8 bg-emerald-600 text-white rounded-none font-black text-lg uppercase tracking-widest hover:bg-emerald-500 transition-all border border-emerald-500/30 flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50;
 }
 @utility btn-secondary {
-  @apply h-16 px-8 bg-white border-2 border-slate-200 text-slate-700 rounded-2xl font-black text-lg uppercase tracking-widest hover:border-emerald-400 hover:text-emerald-600 transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50;
+  @apply h-16 px-8 bg-slate-800 border border-white/10 text-slate-300 rounded-none font-black text-lg uppercase tracking-widest hover:bg-slate-700 hover:text-white transition-all shadow-sm flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50;
 }
 @utility btn-danger {
-  @apply h-16 px-8 bg-white border-2 border-slate-200 text-slate-400 rounded-2xl font-black text-lg uppercase tracking-widest hover:border-rose-200 hover:text-rose-500 transition-all shadow-sm flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50;
+  @apply h-16 px-8 bg-slate-900 border border-white/10 text-slate-500 rounded-none font-black text-lg uppercase tracking-widest hover:border-rose-500/30 hover:text-rose-400 transition-all shadow-sm flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50;
+}
+@utility console-row {
+  @apply transition-colors hover:bg-white/5 border-b border-white/5;
+}
+@utility console-label {
+  @apply text-[9px] font-black matrix-text uppercase tracking-widest opacity-50;
+}
+@utility badge-ok {
+  @apply px-2 py-0.5 bg-emerald-500/10 text-emerald-500 text-[9px] font-black uppercase tracking-widest border border-emerald-500/20 rounded-none;
+}
+@utility badge-ocr {
+  @apply px-2 py-0.5 bg-indigo-500/10 text-indigo-500 text-[9px] font-black uppercase tracking-widest border border-indigo-500/20 rounded-none animate-pulse;
+}
+@utility badge-err {
+  @apply px-2 py-0.5 bg-rose-500/10 text-rose-500 text-[9px] font-black uppercase tracking-widest border border-rose-500/20 rounded-none;
 }

@@ -58,10 +58,10 @@ export const StatsCards: React.FC<StatsCardsProps> = ({ invoices }) => {
       {stats.map((stat, idx) => (
         <div 
           key={idx} 
-          className={`bg-white p-6 rounded-3xl border-2 ${stat.border} shadow-soft transition-all hover:scale-[1.02] group`}
+          className={`bg-white p-6 rounded-none border-2 ${stat.border} transition-all hover:scale-[1.02] group`}
         >
           <div className="flex items-center justify-between mb-4">
-            <div className={`w-14 h-14 ${stat.bg} ${stat.color} rounded-2xl flex items-center justify-center transition-transform group-hover:rotate-3 shadow-md`}>
+            <div className={`w-14 h-14 ${stat.bg} ${stat.color} rounded-none flex items-center justify-center transition-transform group-hover:rotate-3 border border-white/10`}>
               <stat.icon size={28} strokeWidth={2.5} />
             </div>
             <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Estadísticas</span>

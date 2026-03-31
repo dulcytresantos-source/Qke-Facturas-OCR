@@ -26,7 +26,6 @@ import {
 import { InvoiceData, ProcessingStatus } from './types';
 import { extractInvoiceData } from './services/geminiService';
 import { fileToBase64, generateTSV, downloadFile, generateRenamedFileName, formatSpanishAmount, formatSpanishDate } from './utils/helpers';
-import { StatsCards } from './components/StatsCards';
 
 type SortKey = keyof InvoiceData;
 interface SortConfig {
@@ -277,6 +276,11 @@ const App: React.FC = () => {
     }
   };
 
+  const lastProcessedInvoice = useMemo(() => {
+    const completed = invoices.filter(i => i.status === ProcessingStatus.COMPLETED);
+    return completed.length > 0 ? completed[completed.length - 1] : null;
+  }, [invoices]);
+
   const downloadOneRenamed = (inv: InvoiceData) => {
     const file = (window as any)[`file_${inv.internalId}`];
     if (file && inv.renamedFileName) {
@@ -309,282 +313,206 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-100 selection:text-emerald-900">
-      <div className="max-w-[1400px] mx-auto p-6 md:p-10 lg:p-16 space-y-12">
+    <div className="min-h-screen bg-[#020408] text-slate-300 font-sans selection:bg-emerald-500/20 selection:text-emerald-200">
+      <div className="max-w-[1600px] mx-auto border-x border-white/5">
         
-        {/* Header Section - Large & Professional */}
-        <header className="flex flex-col md:flex-row items-center justify-between gap-8 border-b border-slate-200 pb-12">
+        {/* Header Section - Dark & Minimal */}
+        <header className="flex flex-col md:flex-row items-center justify-between gap-8 border-b border-white/5 p-8">
           <div className="flex items-center gap-6">
             <motion.div 
               initial={{ rotate: -10, scale: 0.9 }}
               animate={{ rotate: 0, scale: 1 }}
-              className="w-20 h-20 bg-slate-900 rounded-3xl flex items-center justify-center shadow-2xl shadow-slate-200"
+              className="w-16 h-16 bg-slate-900 rounded-none flex items-center justify-center border border-white/10"
             >
-              <Cpu className="w-12 h-12 text-emerald-400" strokeWidth={2} />
+              <Cpu className="w-10 h-10 text-[#00f2ff]" strokeWidth={2} />
             </motion.div>
             <div>
-              <h1 className="text-5xl font-black tracking-tight text-slate-900 leading-none">
-                INVOICE<span className="text-emerald-600">AI</span>
+              <h1 className="text-4xl font-black tracking-tight text-white leading-none">
+                INVOICE<span className="text-[#00f2ff]">AI</span>
               </h1>
-              <p className="text-slate-400 font-bold text-sm uppercase tracking-[0.4em] mt-2">
-                Enterprise Data Extraction
+              <p className="text-slate-500 font-bold text-[10px] uppercase tracking-[0.4em] mt-2">
+                Neural Data Extraction Engine
               </p>
             </div>
           </div>
 
           <div className="flex items-center gap-6">
             <div className="text-right hidden sm:block">
-              <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Status</p>
+              <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest mb-1">System Status</p>
               <div className="flex items-center gap-2 justify-end">
-                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-                <span className="text-sm font-black text-emerald-600 uppercase tracking-widest">System Online</span>
+                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-none animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest">Active</span>
               </div>
             </div>
-            <div className="h-12 w-[1px] bg-slate-200 hidden sm:block" />
-            <div className="flex items-center gap-3 bg-white px-6 py-3 rounded-2xl border border-slate-200 shadow-sm">
-              <div className="w-8 h-8 bg-slate-100 rounded-lg flex items-center justify-center">
-                <Settings className="w-4 h-4 text-slate-500" />
-              </div>
-              <span className="text-xs font-black text-slate-600 uppercase tracking-widest">v2.5.0</span>
+            <div className="h-10 w-[1px] bg-white/10 hidden sm:block" />
+            <div className="flex items-center gap-3 bg-slate-900/50 px-5 py-2.5 rounded-none border border-white/10">
+              <Settings className="w-3.5 h-3.5 text-slate-500" />
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">v2.5.0</span>
             </div>
           </div>
         </header>
 
-        {/* Main Dashboard Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
-          
-          {/* Left: Matrix Console Dropzone */}
-          <div className="lg:col-span-8 space-y-8">
-            <div className="relative group">
-              <div className="absolute -inset-1 bg-emerald-500/20 rounded-[40px] blur-xl opacity-0 group-hover:opacity-100 transition duration-500"></div>
+        {/* Main Content Blocks */}
+        <div className="flex flex-col">
+          {/* Top Section: Dropzone & Controls */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 border-b border-white/5">
+            {/* Dropzone (Small) */}
+            <div className="lg:col-span-3">
               <div
                 {...getRootProps()}
-                className={`relative matrix-bg rounded-[40px] border-2 matrix-border p-16 transition-all duration-500 cursor-pointer overflow-hidden
-                  ${isDragActive ? 'scale-[1.02] border-emerald-400' : 'hover:scale-[1.01]'}
+                className={`matrix-bg rounded-none border matrix-border p-6 h-full min-h-[180px] transition-all duration-500 cursor-pointer overflow-hidden flex flex-col items-center justify-center gap-4 group
+                  ${isDragActive ? 'border-[#00f2ff]' : 'hover:border-[#00f2ff]/40'}
                 `}
               >
                 <input {...getInputProps()} />
-                
-                {/* Matrix Rain Decoration */}
-                <div className="absolute inset-0 opacity-5 pointer-events-none font-mono text-[8px] leading-none select-none">
-                  {Array(30).fill(0).map((_, i) => (
-                    <div key={i} className="whitespace-nowrap overflow-hidden">
-                      {Math.random().toString(2).substring(2, 100)}
-                    </div>
-                  ))}
+                <div className={`w-12 h-12 rounded-none border border-white/10 flex items-center justify-center bg-black/40 backdrop-blur-sm transition-colors group-hover:border-[#00f2ff]/30
+                  ${isDragActive ? 'text-[#00f2ff] border-[#00f2ff]' : 'text-slate-600'}
+                `}>
+                  <UploadCloud className="w-6 h-6" />
                 </div>
+                <div className="text-center">
+                  <p className="text-xs font-black matrix-text uppercase tracking-widest">Drop Here</p>
+                  <p className="text-[9px] text-slate-600 font-mono mt-1">PDF / JPG / PNG</p>
+                </div>
+              </div>
+            </div>
 
-                <div className="relative z-10 flex flex-col items-center gap-10">
-                  <motion.div
-                    animate={isBatchProcessing ? { rotate: 360 } : {}}
-                    transition={isBatchProcessing ? { repeat: Infinity, duration: 3, ease: "linear" } : {}}
-                    className={`w-32 h-32 rounded-full border-2 matrix-border flex items-center justify-center bg-black/40 backdrop-blur-sm
-                      ${isDragActive ? 'text-emerald-400 border-emerald-400' : 'text-emerald-500/40'}
-                    `}
-                  >
-                    {isBatchProcessing ? (
-                      <Terminal className="w-16 h-16" />
-                    ) : (
-                      <UploadCloud className="w-16 h-16" />
-                    )}
-                  </motion.div>
-
-                  <div className="text-center space-y-4">
-                    <h2 className="text-4xl font-black matrix-text uppercase tracking-tighter">
-                      {isBatchProcessing ? "Procesando Lote..." : isDragActive ? "Soltar Archivos" : "Consola de Carga"}
-                    </h2>
-                    <p className="text-emerald-500/50 font-mono text-lg uppercase tracking-widest">
-                      {isBatchProcessing ? "Analizando estructuras neuronales" : "PDF / JPG / PNG"}
-                    </p>
+            {/* Controls & Stats */}
+            <div className="lg:col-span-9">
+              <div className="bg-slate-900/40 p-6 rounded-none border border-white/5 h-full flex flex-col justify-between gap-6 border-l-0">
+                <div className="flex flex-wrap items-center justify-between gap-6">
+                  <div className="flex gap-3">
+                    <button onClick={processAllInvoices} disabled={isBatchProcessing || invoices.length === 0} className="h-12 px-6 bg-emerald-600 text-white rounded-none font-black text-xs uppercase tracking-widest hover:bg-emerald-500 transition-all flex items-center gap-2 disabled:opacity-30">
+                      <Play className="w-4 h-4" fill="currentColor" /> Ejecutar
+                    </button>
+                    <button onClick={() => { const tsv = generateTSV(invoices, tempMonth, lastSeqNum); setGeneratedTSV(tsv); setShowTSVModal(true); }} disabled={isBatchProcessing || invoices.length === 0} className="h-12 px-6 bg-slate-800 text-white rounded-none font-black text-xs uppercase tracking-widest hover:bg-slate-700 transition-all flex items-center gap-2 disabled:opacity-30">
+                      <FileSpreadsheet className="w-4 h-4" /> Exportar
+                    </button>
+                    <button onClick={handleReset} disabled={isBatchProcessing || invoices.length === 0} className="h-12 px-6 bg-slate-800 text-slate-400 rounded-none font-black text-xs uppercase tracking-widest hover:bg-rose-900/20 hover:text-rose-400 transition-all flex items-center gap-2 disabled:opacity-30">
+                      <Trash2 className="w-4 h-4" /> Reset
+                    </button>
                   </div>
 
-                  {isBatchProcessing && (
-                    <div className="w-full max-w-md space-y-3">
-                      <div className="flex justify-between text-[10px] matrix-text uppercase font-bold tracking-widest">
-                        <span>Progreso de Secuencia</span>
-                        <span>{Math.round((invoices.filter(i => i.status === ProcessingStatus.COMPLETED).length / invoices.length) * 100 || 0)}%</span>
-                      </div>
-                      <div className="h-1.5 w-full bg-emerald-950 rounded-full overflow-hidden border border-emerald-500/20">
-                        <motion.div 
-                          initial={{ width: 0 }}
-                          animate={{ width: `${(invoices.filter(i => i.status === ProcessingStatus.COMPLETED).length / invoices.length) * 100}%` }}
-                          className="h-full bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.5)]"
-                        />
-                      </div>
+                  <div className="flex gap-4">
+                    <div className="text-right">
+                      <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest">Total</p>
+                      <p className="text-xl font-black text-white leading-none">{invoices.length}</p>
                     </div>
+                    <div className="text-right">
+                      <p className="text-[9px] font-black text-emerald-600 uppercase tracking-widest">Ready</p>
+                      <p className="text-xl font-black text-emerald-500 leading-none">{invoices.filter(i => i.status === ProcessingStatus.COMPLETED).length}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[9px] font-black text-indigo-500 uppercase tracking-widest">Importe</p>
+                      <p className="text-xl font-black text-indigo-400 leading-none">
+                        {invoices.filter(i => i.status === ProcessingStatus.COMPLETED).reduce((s, i) => s + i.importe, 0).toLocaleString('es-ES')}€
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                  <div className="flex items-center gap-4">
+                    <div className="w-8 h-8 rounded-none bg-emerald-500/10 flex items-center justify-center">
+                      <FileText className="w-4 h-4 text-emerald-500" />
+                    </div>
+                    <div>
+                      <p className="text-[9px] font-black text-slate-600 uppercase tracking-widest">Última Factura</p>
+                      <p className="text-[11px] font-bold text-slate-300 truncate max-w-[200px]">
+                        {lastProcessedInvoice ? `${lastProcessedInvoice.proveedor} • ${formatSpanishAmount(lastProcessedInvoice.importe)}` : 'Esperando...'}
+                      </p>
+                    </div>
+                  </div>
+                  {invoices.some(i => i.isDuplicate) && (
+                    <button onClick={handleCleanDuplicates} className="px-4 py-2 bg-rose-500/10 text-rose-500 rounded-none text-[9px] font-black uppercase tracking-widest hover:bg-rose-500/20 transition-colors border border-rose-500/20">
+                      Limpiar Duplicados
+                    </button>
                   )}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Right: Control Center */}
-          <div className="lg:col-span-4 space-y-8">
-            <div className="bg-white p-10 rounded-[40px] border border-slate-200 shadow-strong h-full flex flex-col justify-between">
-              <div className="space-y-8">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center">
-                    <LayoutDashboard className="w-6 h-6 text-slate-900" />
-                  </div>
-                  <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Panel de Control</h3>
-                </div>
-
-                <div className="grid grid-cols-1 gap-4">
-                  <button
-                    onClick={processAllInvoices}
-                    disabled={isBatchProcessing || invoices.length === 0}
-                    className="btn-primary w-full"
-                  >
-                    <Play className="w-6 h-6" fill="currentColor" />
-                    Ejecutar
-                  </button>
-                  
-                  <button
-                    onClick={() => {
-                      const tsv = generateTSV(invoices, tempMonth, lastSeqNum);
-                      setGeneratedTSV(tsv);
-                      setShowTSVModal(true);
-                    }}
-                    disabled={isBatchProcessing || invoices.length === 0}
-                    className="btn-secondary w-full"
-                  >
-                    <FileSpreadsheet className="w-6 h-6" />
-                    Exportar
-                  </button>
-
-                  <button
-                    onClick={handleReset}
-                    disabled={isBatchProcessing || invoices.length === 0}
-                    className="btn-danger w-full"
-                  >
-                    <Trash2 className="w-6 h-6" />
-                    Reiniciar
-                  </button>
-                </div>
-              </div>
-
-              <div className="pt-8 border-t border-slate-100 space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Documentos</span>
-                  <span className="text-lg font-black text-slate-900">{invoices.length}</span>
-                </div>
-                {invoices.some(i => i.isDuplicate) && (
-                  <button
-                    onClick={handleCleanDuplicates}
-                    className="w-full py-3 bg-rose-50 text-rose-600 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-rose-100 transition-colors flex items-center justify-center gap-2"
-                  >
-                    <AlertTriangle className="w-4 h-4" />
-                    Limpiar Duplicados
-                  </button>
-                )}
-              </div>
+          {/* Console Listing Area */}
+          <div className="matrix-bg rounded-none border-x border-b matrix-border overflow-hidden">
+          <div className="px-8 py-4 border-b matrix-border flex items-center justify-between bg-black/20">
+            <div className="flex items-center gap-3">
+              <Terminal className="w-4 h-4 text-[#00f2ff]" />
+              <span className="text-[10px] font-black matrix-text uppercase tracking-[0.3em]">Console_Output_Registry</span>
             </div>
-          </div>
-        </div>
-
-        {/* Stats Section - Proportional */}
-        <div className="bg-white rounded-[40px] border border-slate-200 shadow-soft p-2">
-          <StatsCards invoices={invoices} />
-        </div>
-
-        {/* Table Section - Full Width & Proportional */}
-        <div className="bg-white rounded-[40px] border border-slate-200 shadow-strong overflow-hidden">
-          <div className="px-10 py-8 bg-slate-50/50 border-b border-slate-100 flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Layers className="w-6 h-6 text-slate-400" />
-              <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Registro de Facturas</h3>
-            </div>
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-emerald-500 rounded-full" />
-                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Procesado</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-slate-200 rounded-full" />
-                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Pendiente</span>
-              </div>
+            <div className="flex gap-4">
+              <span className="text-[9px] font-mono text-slate-600">PDF</span>
+              <span className="text-[9px] font-mono text-slate-600">JPG</span>
+              <span className="text-[9px] font-mono text-slate-600">PNG</span>
             </div>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+            <table className="w-full text-left border-collapse font-mono">
               <thead>
-                <tr className="border-b border-slate-100">
-                  <th className="px-10 py-6 text-[11px] font-black text-slate-400 uppercase tracking-widest cursor-pointer group" onClick={() => handleSort('fileName')}>
-                    <div className="flex items-center gap-2">Archivo <SortIcon column="fileName" /></div>
+                <tr className="border-b matrix-border bg-black/40">
+                  <th className="px-8 py-4 console-label cursor-pointer" onClick={() => handleSort('fileName')}>
+                    <div className="flex items-center gap-2">DOC <SortIcon column="fileName" /></div>
                   </th>
-                  <th className="px-10 py-6 text-[11px] font-black text-slate-400 uppercase tracking-widest cursor-pointer group" onClick={() => handleSort('proveedor')}>
-                    <div className="flex items-center gap-2">Proveedor <SortIcon column="proveedor" /></div>
+                  <th className="px-8 py-4 console-label cursor-pointer" onClick={() => handleSort('proveedor')}>
+                    <div className="flex items-center gap-2">ALIAS <SortIcon column="proveedor" /></div>
                   </th>
-                  <th className="px-10 py-6 text-[11px] font-black text-slate-400 uppercase tracking-widest cursor-pointer group" onClick={() => handleSort('fechaFactura')}>
-                    <div className="flex items-center gap-2">Fecha <SortIcon column="fechaFactura" /></div>
+                  <th className="px-8 py-4 console-label cursor-pointer" onClick={() => handleSort('fechaFactura')}>
+                    <div className="flex items-center gap-2">FECHA <SortIcon column="fechaFactura" /></div>
                   </th>
-                  <th className="px-10 py-6 text-[11px] font-black text-slate-400 uppercase tracking-widest text-right cursor-pointer group" onClick={() => handleSort('importe')}>
-                    <div className="flex items-center justify-end gap-2">Importe <SortIcon column="importe" /></div>
+                  <th className="px-8 py-4 console-label text-right cursor-pointer" onClick={() => handleSort('importe')}>
+                    <div className="flex items-center justify-end gap-2">IMPORTE <SortIcon column="importe" /></div>
                   </th>
-                  <th className="px-10 py-6 text-[11px] font-black text-slate-400 uppercase tracking-widest text-center">Acciones</th>
+                  <th className="px-8 py-4 console-label">DOC_EXT</th>
+                  <th className="px-8 py-4 console-label text-center">CMD</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-50">
+              <tbody className="divide-y border-white/5">
                 <AnimatePresence mode="popLayout">
                   {sortedInvoices.length === 0 ? (
-                    <motion.tr initial={{ opacity: 0 }} animate={{ opacity: 1 }} key="empty">
-                      <td colSpan={5} className="px-10 py-32 text-center">
-                        <div className="flex flex-col items-center gap-6 opacity-20">
-                          <FileText className="w-20 h-20 text-slate-400" strokeWidth={1} />
-                          <p className="text-xl font-black uppercase tracking-[0.4em] text-slate-500">Sin Documentos</p>
-                        </div>
+                    <tr key="empty">
+                      <td colSpan={6} className="px-8 py-20 text-center opacity-20">
+                        <p className="text-xs font-mono uppercase tracking-widest">No data in buffer</p>
                       </td>
-                    </motion.tr>
+                    </tr>
                   ) : (
                     sortedInvoices.map((inv) => (
                       <motion.tr 
                         layout
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
                         key={inv.internalId} 
-                        className={`group transition-all hover:bg-slate-50/80 ${inv.isDuplicate ? 'bg-rose-50/30' : ''}`}
+                        className={`console-row ${inv.isDuplicate ? 'bg-rose-500/5' : ''}`}
                       >
-                        <td className="px-10 py-8">
-                          <div className="flex items-center gap-5">
-                            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-transform group-hover:scale-110 shadow-sm
-                              ${inv.status === ProcessingStatus.COMPLETED ? 'bg-emerald-100 text-emerald-600' : 
-                                inv.status === ProcessingStatus.FAILED ? 'bg-rose-100 text-rose-600' : 
-                                'bg-slate-100 text-slate-400'}
-                            `}>
-                              <FileText className="w-6 h-6" />
-                            </div>
-                            <div className="flex flex-col min-w-0">
-                              <span className="font-black text-slate-800 truncate max-w-[250px] text-lg leading-tight">{inv.fileName}</span>
-                              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">{inv.status}</span>
-                            </div>
-                          </div>
+                        <td className="px-8 py-4">
+                          <span className="text-[#00f2ff] font-bold text-xs">{inv.numeroFactura || '---'}</span>
                         </td>
-                        <td className="px-10 py-8">
-                          <span className="font-black text-slate-900 uppercase tracking-tight text-lg">{inv.proveedor || '---'}</span>
+                        <td className="px-8 py-4">
+                          <span className="text-slate-300 text-xs uppercase">{inv.proveedor || '---'}</span>
                         </td>
-                        <td className="px-10 py-8">
-                          <span className="font-bold text-slate-500 text-lg">{formatSpanishDate(inv.fechaFactura)}</span>
+                        <td className="px-8 py-4">
+                          <span className="text-slate-500 text-xs">{formatSpanishDate(inv.fechaFactura)}</span>
                         </td>
-                        <td className="px-10 py-8 text-right">
-                          <span className="font-black text-emerald-600 text-2xl tracking-tighter">{formatSpanishAmount(inv.importe)}</span>
+                        <td className="px-8 py-4 text-right">
+                          <span className="text-emerald-500 font-bold text-xs">{formatSpanishAmount(inv.importe)}</span>
                         </td>
-                        <td className="px-10 py-8">
+                        <td className="px-8 py-4">
+                          <span className="text-slate-600 text-[10px] truncate max-w-[150px] block">{inv.fileName}</span>
+                        </td>
+                        <td className="px-8 py-4">
                           <div className="flex items-center justify-center gap-3">
-                            <button
-                              onClick={() => downloadOneRenamed(inv)}
-                              className="p-4 bg-white border border-slate-200 text-slate-400 rounded-2xl hover:text-emerald-600 hover:border-emerald-300 hover:shadow-lg transition-all active:scale-90"
-                              title="Descargar"
-                            >
-                              <Download className="w-6 h-6" />
-                            </button>
-                            <button
-                              onClick={() => removeInvoice(inv.internalId)}
-                              className="p-4 bg-white border border-slate-200 text-slate-400 rounded-2xl hover:text-rose-600 hover:border-rose-300 hover:shadow-lg transition-all active:scale-90"
-                              title="Eliminar"
-                            >
-                              <Trash2 className="w-6 h-6" />
+                            {inv.status === ProcessingStatus.COMPLETED ? (
+                              <span className="badge-ok">OK</span>
+                            ) : inv.status === ProcessingStatus.PROCESSING ? (
+                              <span className="badge-ocr">OCR...</span>
+                            ) : inv.status === ProcessingStatus.FAILED ? (
+                              <span className="badge-err">ERR</span>
+                            ) : (
+                              <span className="text-[10px] text-slate-700">WAIT</span>
+                            )}
+                            <button onClick={() => removeInvoice(inv.internalId)} className="text-slate-700 hover:text-rose-500 transition-colors">
+                              <X className="w-3 h-3" />
                             </button>
                           </div>
                         </td>
@@ -596,8 +524,9 @@ const App: React.FC = () => {
             </table>
           </div>
         </div>
+      </div>
 
-        {/* TSV Modal */}
+      {/* TSV Modal */}
         <AnimatePresence>
           {showTSVModal && (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-slate-900/90 backdrop-blur-md">
@@ -605,19 +534,19 @@ const App: React.FC = () => {
                 initial={{ scale: 0.95, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.95, opacity: 0 }}
-                className="bg-white rounded-[48px] shadow-2xl w-full max-w-5xl overflow-hidden"
+                className="bg-slate-900 rounded-none w-full max-w-5xl overflow-hidden border border-white/10"
               >
-                <div className="px-12 py-10 border-b border-slate-100 flex items-center justify-between">
+                <div className="px-12 py-10 border-b border-white/5 flex items-center justify-between bg-black/20">
                   <div className="flex items-center gap-5">
-                    <div className="w-14 h-14 bg-emerald-600 text-white rounded-2xl flex items-center justify-center">
+                    <div className="w-14 h-14 bg-emerald-600 text-white rounded-none flex items-center justify-center border border-emerald-500/30">
                       <FileSpreadsheet className="w-8 h-8" />
                     </div>
                     <div>
-                      <h3 className="font-black text-slate-900 uppercase text-3xl tracking-tight">Exportar Datos</h3>
-                      <p className="text-slate-400 font-bold text-sm uppercase tracking-widest">TSV para Excel / Sheets</p>
+                      <h3 className="font-black text-white uppercase text-3xl tracking-tight">Exportar Datos</h3>
+                      <p className="text-slate-500 font-bold text-sm uppercase tracking-widest">TSV para Excel / Sheets</p>
                     </div>
                   </div>
-                  <button onClick={() => setShowTSVModal(false)} className="p-4 text-slate-300 hover:text-rose-500 transition-colors">
+                  <button onClick={() => setShowTSVModal(false)} className="p-4 text-slate-500 hover:text-rose-500 transition-colors">
                     <X className="w-8 h-8" />
                   </button>
                 </div>
@@ -625,7 +554,7 @@ const App: React.FC = () => {
                   <textarea
                     readOnly
                     value={generatedTSV}
-                    className="w-full h-[400px] p-8 font-mono text-base bg-slate-900 text-emerald-400 rounded-3xl border-none outline-none leading-relaxed overflow-x-auto shadow-inner"
+                    className="w-full h-[400px] p-8 font-mono text-base bg-black/40 text-emerald-400 rounded-none border border-white/5 outline-none leading-relaxed overflow-x-auto shadow-inner"
                     wrap="off"
                   />
                   <div className="flex flex-col md:flex-row justify-between items-center gap-8">
@@ -638,7 +567,7 @@ const App: React.FC = () => {
                         setCopyStatus("¡COPIADO!");
                         setTimeout(() => setCopyStatus("COPIAR DATOS"), 2000);
                       }}
-                      className="btn-primary px-12 h-20 text-2xl"
+                      className="h-20 px-12 bg-emerald-600 text-white rounded-none font-black text-2xl uppercase tracking-widest hover:bg-emerald-500 transition-all flex items-center gap-4 border border-emerald-500/30"
                     >
                       {copyStatus === "¡COPIADO!" ? <Check className="w-8 h-8" /> : <Copy className="w-8 h-8" />}
                       {copyStatus}
