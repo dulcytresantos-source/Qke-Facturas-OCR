@@ -21,7 +21,8 @@ import {
   Layers,
   Search,
   Filter,
-  ArrowUpDown
+  ArrowUpDown,
+  RefreshCw
 } from 'lucide-react';
 import { InvoiceData, ProcessingStatus } from './types';
 import { extractInvoiceData } from './services/geminiService';
@@ -671,7 +672,7 @@ const App: React.FC = () => {
         {/* Version Control */}
         <div className="fixed bottom-4 right-4 z-50">
           <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] bg-white/50 px-2 py-1 border border-slate-100">
-            v2.5.1_OCR_NIF_REORDER
+            v2.5.2_FIX_IMPORT
           </span>
         </div>
       </div>
