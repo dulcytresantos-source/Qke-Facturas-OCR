@@ -2,27 +2,47 @@
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 }
 
 @layer base {
   body {
-    @apply bg-slate-950 text-emerald-500;
+    @apply bg-slate-50 text-slate-900 text-base antialiased selection:bg-emerald-100 selection:text-emerald-900;
   }
 }
 
-@layer utilities {
-  @keyframes matrix-rain {
-    0% { transform: translateY(-100%); }
-    100% { transform: translateY(100%); }
-  }
-  .animate-matrix-rain {
-    animation: matrix-rain 10s linear infinite;
-  }
-  @keyframes scan-line {
-    0% { top: 0; }
-    100% { top: 100%; }
-  }
-  .animate-scan-line {
-    animation: scan-line 4s linear infinite;
-  }
+@utility shadow-soft {
+  box-shadow: 0 2px 15px -3px rgba(0, 0, 0, 0.07), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+@utility shadow-strong {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+@utility matrix-bg {
+  background: #0a0a0a;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(0, 255, 65, 0.05) 0%, transparent 100%),
+    linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+  background-size: 100% 100%, 100% 2px, 3px 100%;
+}
+@utility matrix-text {
+  color: #00ff41;
+  text-shadow: 0 0 12px rgba(0, 255, 65, 0.6);
+  font-family: var(--font-mono);
+}
+@utility matrix-border {
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  box-shadow: inset 0 0 20px rgba(0, 255, 65, 0.1), 0 0 15px rgba(0, 255, 65, 0.1);
+}
+@utility glass-card {
+  @apply bg-white border border-slate-200 shadow-soft;
+}
+@utility btn-primary {
+  @apply h-16 px-8 bg-emerald-600 text-white rounded-2xl font-black text-lg uppercase tracking-widest hover:bg-emerald-500 transition-all shadow-lg shadow-emerald-100 flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50;
+}
+@utility btn-secondary {
+  @apply h-16 px-8 bg-white border-2 border-slate-200 text-slate-700 rounded-2xl font-black text-lg uppercase tracking-widest hover:border-emerald-400 hover:text-emerald-600 transition-all shadow-sm hover:shadow-md flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50;
+}
+@utility btn-danger {
+  @apply h-16 px-8 bg-white border-2 border-slate-200 text-slate-400 rounded-2xl font-black text-lg uppercase tracking-widest hover:border-rose-200 hover:text-rose-500 transition-all shadow-sm flex items-center justify-center gap-3 active:scale-95 disabled:opacity-50;
 }

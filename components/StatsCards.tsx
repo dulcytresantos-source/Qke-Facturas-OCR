@@ -18,59 +18,59 @@ export const StatsCards: React.FC<StatsCardsProps> = ({ invoices }) => {
 
   const stats = [
     {
-      label: 'TOTAL_FILES',
+      label: 'TOTAL FACTURAS',
       value: total,
       icon: FileText,
-      color: 'text-emerald-500',
-      bg: 'bg-emerald-950/20',
-      border: 'border-emerald-900/50',
+      color: 'text-slate-600',
+      bg: 'bg-slate-100',
+      border: 'border-slate-200',
     },
     {
-      label: 'PROCESSED',
+      label: 'PROCESADAS',
       value: completed,
       subValue: `/ ${total}`,
       icon: CheckCircle2,
-      color: 'text-emerald-400',
-      bg: 'bg-emerald-950/30',
-      border: 'border-emerald-500/30',
+      color: 'text-emerald-600',
+      bg: 'bg-emerald-50',
+      border: 'border-emerald-200',
     },
     {
-      label: 'ACTIVE / ERR',
+      label: 'EN CURSO / ERROR',
       value: processing,
       subValue: `| ${failed}`,
       icon: AlertCircle,
-      color: 'text-amber-500',
-      bg: 'bg-amber-950/20',
-      border: 'border-amber-500/30',
+      color: 'text-amber-600',
+      bg: 'bg-amber-50',
+      border: 'border-amber-200',
     },
     {
-      label: 'TOTAL_VAL',
+      label: 'IMPORTE TOTAL',
       value: `${totalAmount.toLocaleString('es-ES', { minimumFractionDigits: 2 })} €`,
       icon: Euro,
-      color: 'text-emerald-300',
-      bg: 'bg-emerald-950/40',
-      border: 'border-emerald-500/50',
+      color: 'text-indigo-600',
+      bg: 'bg-indigo-50',
+      border: 'border-indigo-200',
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 mb-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       {stats.map((stat, idx) => (
         <div 
           key={idx} 
-          className={`bg-black p-3 rounded border ${stat.border} transition-all hover:border-emerald-500 group shadow-lg`}
+          className={`bg-white p-6 rounded-3xl border-2 ${stat.border} shadow-soft transition-all hover:scale-[1.02] group`}
         >
-          <div className="flex items-center justify-between mb-1">
-            <div className={`w-8 h-8 ${stat.bg} ${stat.color} rounded flex items-center justify-center transition-transform group-hover:scale-110 border border-emerald-500/20`}>
-              <stat.icon size={16} strokeWidth={2.5} />
+          <div className="flex items-center justify-between mb-4">
+            <div className={`w-14 h-14 ${stat.bg} ${stat.color} rounded-2xl flex items-center justify-center transition-transform group-hover:rotate-3 shadow-md`}>
+              <stat.icon size={28} strokeWidth={2.5} />
             </div>
-            <span className="text-[7px] font-black text-emerald-900 uppercase tracking-widest">DATA_NODE_{idx}</span>
+            <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Estadísticas</span>
           </div>
           <div>
-            <p className="text-[8px] font-bold text-emerald-700 uppercase tracking-wider mb-0.5">{stat.label}</p>
-            <div className="flex items-baseline gap-1.5">
-              <p className={`text-lg font-black tracking-tighter ${stat.color}`}>{stat.value}</p>
-              {stat.subValue && <span className="text-[10px] font-bold text-emerald-900">{stat.subValue}</span>}
+            <p className="text-sm font-black text-slate-500 uppercase tracking-[0.1em] mb-1">{stat.label}</p>
+            <div className="flex items-baseline gap-2">
+              <p className={`text-4xl font-black tracking-tight ${stat.color}`}>{stat.value}</p>
+              {stat.subValue && <span className="text-lg font-black text-slate-300 tracking-tight">{stat.subValue}</span>}
             </div>
           </div>
         </div>
