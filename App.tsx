@@ -21,10 +21,36 @@ const App: React.FC = () => {
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: null, direction: 'asc' });
   const stopProcessingRef = useRef(false);
   
+  const hasApiKey = Boolean(process.env.API_KEY) && process.env.API_KEY !== "undefined" && process.env.API_KEY !== "";
+
   // Estado para el Template de Numeración
   const [tempMonth, setTempMonth] = useState("");
   const [tempLastSeq, setTempLastSeq] = useState("");
   const seqInputRef = useRef<HTMLInputElement>(null);
+  const dragCounter = useRef(0);
+
+  // Prevenir el icono de "prohibido" en toda la página y manejar drops accidentales
+  useEffect(() => {
+    const handleDragOver = (e: DragEvent) => {
+      // Solo prevenir si estamos arrastrando archivos
+      if (e.dataTransfer?.types.includes('Files')) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'copy';
+      }
+    };
+
+    const handleDrop = (e: DragEvent) => {
+      // Prevenir que el navegador abra el archivo si se suelta fuera del dropzone
+      e.preventDefault();
+    };
+
+    window.addEventListener('dragover', handleDragOver);
+    window.addEventListener('drop', handleDrop);
+    return () => {
+      window.removeEventListener('dragover', handleDragOver);
+      window.removeEventListener('drop', handleDrop);
+    };
+  }, []);
 
   // Manejador ágil para el mes (auto-tab)
   const handleMonthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -279,6 +305,15 @@ const App: React.FC = () => {
             </p>
           </div>
 
+          {!hasApiKey && (
+            <div className="bg-rose-50 border border-rose-100 px-4 py-2 rounded-2xl flex items-center gap-3 animate-pulse">
+              <div className="w-2 h-2 bg-rose-500 rounded-full"></div>
+              <p className="text-[10px] font-black text-rose-700 uppercase tracking-widest">
+                Falta API KEY - Revisa los Secretos
+              </p>
+            </div>
+          )}
+
           <div className="flex items-center gap-3">
             <span className="text-[10px] bg-slate-200 text-slate-600 px-3 py-1.5 rounded-full uppercase tracking-widest font-black border border-slate-300/50">
               v2.4 Stable
@@ -420,9 +455,38 @@ const App: React.FC = () => {
 
         {/* Drop Zone */}
         <div 
-          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={(e) => { e.preventDefault(); setIsDragging(false); if (e.dataTransfer.files) addFilesToQueue(e.dataTransfer.files); }}
+          onDragOver={(e) => { 
+            e.preventDefault(); 
+            e.stopPropagation();
+            if (e.dataTransfer) {
+              e.dataTransfer.dropEffect = 'copy';
+            }
+          }}
+          onDragEnter={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dragCounter.current++;
+            if (e.dataTransfer?.types.includes('Files')) {
+              setIsDragging(true);
+            }
+          }}
+          onDragLeave={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            dragCounter.current--;
+            if (dragCounter.current === 0) {
+              setIsDragging(false);
+            }
+          }}
+          onDrop={(e) => { 
+            e.preventDefault(); 
+            e.stopPropagation();
+            dragCounter.current = 0;
+            setIsDragging(false); 
+            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+              addFilesToQueue(e.dataTransfer.files); 
+            }
+          }}
           className={`
             relative mb-10 p-16 border-2 border-dashed rounded-[48px] flex flex-col items-center justify-center transition-all duration-500
             ${isDragging ? 'border-indigo-500 bg-indigo-50/50 scale-[0.99] shadow-inner' : 'border-slate-200 bg-white hover:border-indigo-300 hover:bg-slate-50/50 shadow-sm'}
@@ -484,14 +548,16 @@ const App: React.FC = () => {
                     <tr key={inv.internalId} className={`hover:bg-slate-50/50 transition-colors group ${inv.isDuplicate ? 'bg-rose-50/30' : ''}`}>
                       <td className="px-8 py-6">
                         <div className="flex flex-col">
-                           <span className={`text-sm font-bold truncate max-w-[200px] ${inv.isDuplicate ? 'text-rose-900 line-through opacity-40' : 'text-slate-900'}`} title={inv.fileName}>
-                             {inv.fileName}
-                           </span>
-                           {inv.status === ProcessingStatus.COMPLETED && !inv.isDuplicate && (
-                             <span className="text-xs text-indigo-600 font-black mt-2 bg-indigo-50 px-3 py-1.5 rounded-xl inline-block w-fit border border-indigo-100/50 uppercase tracking-tight shadow-sm">
-                               → {inv.renamedFileName}
+                           <div className="flex items-center gap-3">
+                             <span className={`text-sm font-bold truncate max-w-[180px] ${inv.isDuplicate ? 'text-rose-900 line-through opacity-40' : 'text-slate-900'}`} title={inv.fileName}>
+                               {inv.fileName}
                              </span>
-                           )}
+                             {inv.status === ProcessingStatus.COMPLETED && !inv.isDuplicate && (
+                               <span className="text-xs text-indigo-600 font-black bg-indigo-50 px-3 py-1.5 rounded-xl border border-indigo-100/50 uppercase tracking-tight shadow-sm whitespace-nowrap">
+                                 → {inv.renamedFileName}
+                               </span>
+                             )}
+                           </div>
                            <span className="text-[9px] font-black text-slate-300 uppercase mt-1 tracking-widest">ID: {inv.internalId.split('-').pop()}</span>
                         </div>
                       </td>
@@ -535,9 +601,22 @@ const App: React.FC = () => {
                                <div className="flex items-center gap-3">
                                  <span className="text-[9px] font-black text-emerald-600 uppercase bg-emerald-50 border border-emerald-100 px-3 py-2 rounded-xl tracking-widest">Completado</span>
                                  <button 
+                                   draggable
+                                   onDragStart={(e) => {
+                                     const file = (window as any)[`file_${inv.internalId}`];
+                                     if (file && inv.renamedFileName) {
+                                       const url = URL.createObjectURL(file);
+                                       e.dataTransfer.effectAllowed = "copy";
+                                       // Formato DownloadURL: mime:filename:url
+                                       const downloadData = `${file.type}:${inv.renamedFileName}:${url}`;
+                                       e.dataTransfer.setData("DownloadURL", downloadData);
+                                       // También añadir como texto por si acaso
+                                       e.dataTransfer.setData("text/plain", inv.renamedFileName);
+                                     }
+                                   }}
                                    onClick={() => downloadOneRenamed(inv)}
-                                   className="p-2.5 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-2xl transition-all border border-indigo-100 shadow-sm active:scale-90"
-                                   title="Descargar archivo renombrado"
+                                   className="p-2.5 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-2xl transition-all border border-indigo-100 shadow-sm active:scale-90 cursor-grab active:cursor-grabbing"
+                                   title="Arrastra este icono a una carpeta para descargar o haz clic"
                                  >
                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
                                  </button>
