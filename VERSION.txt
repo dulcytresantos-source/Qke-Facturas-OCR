@@ -1,0 +1,3 @@
+// BUILD: 2026-03-31 21:23
+// VERSION: 1.2.0
+// CHANGES: Added NIF extraction, reordered OCR list columns, updated TSV export.
