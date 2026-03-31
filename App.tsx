@@ -486,9 +486,9 @@ const App: React.FC = () => {
           {/* Console Listing Area */}
           <div className="matrix-bg rounded-none border-x border-b border-slate-200 overflow-hidden">
           <div className="px-8 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-            <div className="flex items-center gap-3">
-              <Terminal className="w-4 h-4 text-emerald-600" />
-              <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em]">Console_Output_Registry</span>
+            <div className="flex items-center gap-4">
+              <Terminal className="w-6 h-6 text-emerald-600" />
+              <span className="text-sm font-black text-slate-700 uppercase tracking-[0.4em]">Console_Output_Registry</span>
             </div>
             <div className="flex gap-4">
               <span className="text-[9px] font-mono text-slate-400">PDF</span>
@@ -555,11 +555,39 @@ const App: React.FC = () => {
                         <td className="px-8 py-4">
                           <div className="flex items-center justify-center gap-3">
                             {inv.status === ProcessingStatus.COMPLETED ? (
-                              <button onClick={() => downloadInvoice(inv)} className="text-indigo-600 hover:text-indigo-800 transition-colors" title="Descargar">
-                                <Download className="w-4 h-4" />
-                              </button>
+                              <>
+                                <button 
+                                  onClick={() => {
+                                    const tsv = generateTSV([inv], tempMonth, lastSeqNum);
+                                    setGeneratedTSV(tsv);
+                                    setShowTSVModal(true);
+                                  }} 
+                                  className="text-emerald-600 hover:text-emerald-800 transition-colors" 
+                                  title="Exportar Fila"
+                                >
+                                  <FileSpreadsheet className="w-4 h-4" />
+                                </button>
+                                <button onClick={() => downloadInvoice(inv)} className="text-indigo-600 hover:text-indigo-800 transition-colors" title="Descargar">
+                                  <Download className="w-4 h-4" />
+                                </button>
+                                <button 
+                                  onClick={() => processSingleInvoice(inv.internalId)} 
+                                  className="text-slate-400 hover:text-indigo-600 transition-colors" 
+                                  title="Re-procesar (Actualizar con nueva numeración)"
+                                >
+                                  <RefreshCw className="w-4 h-4" />
+                                </button>
+                              </>
                             ) : inv.status === ProcessingStatus.PROCESSING ? (
-                              <span className="badge-ocr">OCR...</span>
+                              <div className="flex items-center gap-2">
+                                <motion.div
+                                  animate={{ rotate: 360 }}
+                                  transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                                >
+                                  <RefreshCw className="w-4 h-4 text-indigo-600" />
+                                </motion.div>
+                                <span className="text-[10px] font-black text-indigo-600 animate-pulse">OCR...</span>
+                              </div>
                             ) : inv.status === ProcessingStatus.FAILED ? (
                               <button onClick={() => processSingleInvoice(inv.internalId)} className="text-rose-500 hover:text-rose-700 transition-colors" title="Reintentar">
                                 <Play className="w-4 h-4" />
