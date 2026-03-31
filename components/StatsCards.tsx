@@ -64,13 +64,13 @@ export const StatsCards: React.FC<StatsCardsProps> = ({ invoices }) => {
             <div className={`w-14 h-14 ${stat.bg} ${stat.color} rounded-none flex items-center justify-center transition-transform group-hover:rotate-3 border border-white/10`}>
               <stat.icon size={28} strokeWidth={2.5} />
             </div>
-            <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em]">Estadísticas</span>
+            <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Estadísticas</span>
           </div>
           <div>
-            <p className="text-sm font-black text-slate-500 uppercase tracking-[0.1em] mb-1">{stat.label}</p>
+            <p className="text-sm font-black text-slate-400 uppercase tracking-[0.1em] mb-1">{stat.label}</p>
             <div className="flex items-baseline gap-2">
               <p className={`text-4xl font-black tracking-tight ${stat.color}`}>{stat.value}</p>
-              {stat.subValue && <span className="text-lg font-black text-slate-300 tracking-tight">{stat.subValue}</span>}
+              {stat.subValue && <span className="text-lg font-black text-slate-400 tracking-tight">{stat.subValue}</span>}
             </div>
           </div>
         </div>
