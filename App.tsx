@@ -636,6 +636,13 @@ const App: React.FC = () => {
             </div>
           )}
         </AnimatePresence>
+
+        {/* Version Control */}
+        <div className="fixed bottom-4 right-4 z-50">
+          <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] bg-white/50 px-2 py-1 border border-slate-100">
+            v1.2.0_OCR_NIF_REORDER
+          </span>
+        </div>
       </div>
     </div>
   );
