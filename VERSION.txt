@@ -1,3 +1,3 @@
-// BUILD: 2026-03-31 21:44
-// VERSION: 2.5.2
-// CHANGES: Fixed missing RefreshCw import. Updated signature.
+// BUILD: 2026-04-01 09:26
+// VERSION: 2.5.5
+// CHANGES: Maintained original identifier in TSV export for files that already have the correct naming pattern.

@@ -26,7 +26,7 @@ import {
 } from 'lucide-react';
 import { InvoiceData, ProcessingStatus } from './types';
 import { extractInvoiceData } from './services/geminiService';
-import { fileToBase64, generateTSV, downloadFile, generateRenamedFileName, formatSpanishAmount, formatSpanishDate } from './utils/helpers';
+import { fileToBase64, generateTSV, downloadFile, generateRenamedFileName, formatSpanishAmount, formatSpanishDate, RENAMED_PATTERN } from './utils/helpers';
 
 type SortKey = keyof InvoiceData;
 interface SortConfig {
@@ -126,6 +126,7 @@ const App: React.FC = () => {
         numeroFactura: '-',
         importe: 0,
         nif: '-',
+        isAlreadyRenamed: RENAMED_PATTERN.test(file.name)
       };
 
       (window as any)[`file_${internalId}`] = file;
@@ -374,7 +375,7 @@ const App: React.FC = () => {
               className="flex items-center gap-3 bg-white px-5 py-2.5 rounded-none border border-slate-200 hover:bg-slate-50 transition-colors cursor-pointer"
             >
               <Settings className="w-3.5 h-3.5 text-slate-400" />
-              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">v2.5.1</span>
+              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">v2.5.5</span>
             </button>
           </div>
         </header>
@@ -540,9 +541,16 @@ const App: React.FC = () => {
                         className={`console-row ${inv.isDuplicate ? 'bg-rose-50' : ''}`}
                       >
                         <td className="px-8 py-4">
-                          <span className="text-indigo-600 font-bold text-xs truncate max-w-[250px] block">
-                            {inv.renamedFileName || '---'}
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-indigo-600 font-bold text-xs truncate max-w-[250px] block">
+                              {inv.renamedFileName || '---'}
+                            </span>
+                            {inv.isAlreadyRenamed && (
+                              <span className="px-1.5 py-0.5 bg-amber-100 text-amber-700 text-[8px] font-black uppercase tracking-tighter border border-amber-200" title="Nombre original ya formateado">
+                                FIXED
+                              </span>
+                            )}
+                          </div>
                         </td>
                         <td className="px-8 py-4">
                           <span className="text-slate-700 text-xs uppercase">{inv.proveedor || '---'}</span>
@@ -672,7 +680,7 @@ const App: React.FC = () => {
         {/* Version Control */}
         <div className="fixed bottom-4 right-4 z-50">
           <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.3em] bg-white/50 px-2 py-1 border border-slate-100">
-            v2.5.2_FIX_IMPORT
+            v2.5.5_ID_MAINTAINED
           </span>
         </div>
       </div>

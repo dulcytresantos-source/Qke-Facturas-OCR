@@ -18,6 +18,7 @@ export interface InvoiceData {
   isDuplicate?: boolean;
   duplicateOfName?: string; // Nombre original del archivo que ya existía
   renamedFileName?: string;
+  isAlreadyRenamed?: boolean;
   nif?: string;
   error?: string;
 }

@@ -46,6 +46,9 @@ export const getNDoc = (
   return `${month}-FC${seqStr}`;
 };
 
+// Patrón para detectar archivos ya renombrados: 00-FC00 ALIAS 00,00€
+export const RENAMED_PATTERN = /^\d{2}-FC\d{2,}\s+.+\s+[\d.,]+€?\.[a-zA-Z0-9]+$/i;
+
 export const generateRenamedFileName = (
   invoice: InvoiceData, 
   index: number, 
@@ -53,6 +56,11 @@ export const generateRenamedFileName = (
   templateMonth?: string,
   lastSequence?: number
 ): string => {
+  // Detectar si el archivo ya tiene el formato "bueno"
+  if (RENAMED_PATTERN.test(originalFileName)) {
+    return originalFileName;
+  }
+
   const ndoc = getNDoc(invoice, index, templateMonth, lastSequence);
   const shortName = invoice.shortenedProveedor || "PROVEEDOR";
   const formattedAmount = formatSpanishAmount(invoice.importe);
@@ -85,17 +93,22 @@ export const generateTSV = (
   const rows = invoices
     .filter(inv => inv.status === 'COMPLETED')
     .map((inv) => {
-      let currentNDoc = "";
+      let identifier = "";
       
-      if (!inv.isDuplicate) {
-        currentNDoc = getNDoc(inv, validIndexCounter, templateMonth, lastSequence);
+      if (inv.isDuplicate) {
+        identifier = `DUPLICADO-${inv.duplicateOfName}`;
+      } else if (RENAMED_PATTERN.test(inv.fileName)) {
+        // Si ya está bien, mantenemos el nombre original (sin extensión) como identificador
+        identifier = inv.fileName.replace(/\.[^/.]+$/, "");
+        validIndexCounter++;
+      } else {
+        const currentNDoc = getNDoc(inv, validIndexCounter, templateMonth, lastSequence);
+        const formattedAmount = formatSpanishAmount(inv.importe);
+        identifier = `${currentNDoc} ${inv.shortenedProveedor} ${formattedAmount}`;
         validIndexCounter++;
       }
 
-      const formattedAmount = formatSpanishAmount(inv.importe);
-      const identifier = inv.isDuplicate 
-        ? `DUPLICADO-${inv.duplicateOfName}` 
-        : `${currentNDoc} ${inv.shortenedProveedor} ${formattedAmount}`;
+      const formattedAmountRow = formatSpanishAmount(inv.importe);
       
       return [
         identifier,
@@ -103,7 +116,7 @@ export const generateTSV = (
         inv.nif || "-",
         inv.numeroFactura,
         formatSpanishDate(inv.fechaFactura),
-        formattedAmount,
+        formattedAmountRow,
         inv.isDuplicate ? `DUPLICADO DE: ${inv.duplicateOfName}` : "OK"
       ];
     });
